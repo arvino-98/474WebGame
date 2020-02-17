@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>MantisTobaggan</title>
+        <link rel="stylesheet" href="style/mantis.css" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        
+    </head>
+
+    <body>
+        <div id="mainContent">
+            <div id="startScreen">
+                <button id="startGameButton" onclick="gameStart()">Start Game</button>
+            </div>
+            <div id = "gameToolbar">
+                <button id="restartGameButton" onclick="gameRestart()">Restart Game</button>
+                <button id="spawnEnemyButton" onclick="buttonSpawn()">Spawn Enemy</button>
+                <button id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
+            </div>
+            <div id="gameBoard">
+                <div id="player"></div>
+                <!-- Any game entities (enemies, obstacles, ...) generated in js should generally be appended here within gameBoard -->
+            </div>
+        </div>
+
+        <!-- All scripts below -->
+        <!-- Controller -->
+        <script type='text/javascript' src="./scripts/controller/input.js"></script>
+        <script type='text/javascript' src="./scripts/controller/state_switcher.js"></script>
+        <!-- Model -->
+        <script type='text/javascript' src="./scripts/model/environment.js"></script>
+        <script type='text/javascript' src="./scripts/model/player.js"></script>
+        <script type='text/javascript' src="./scripts/model/gameState.js"></script>
+        <script type='text/javascript' src="./scripts/model/basicEnemy.js"></script>
+        <script type='text/javascript' src="./scripts/model/util.js"></script>
+        <!-- View -->
+        <script type='text/javascript' src="./scripts/view/gameView.js"></script>
+        <!-- Main -->
+        <script type='text/javascript' src="./scripts/main.js"></script>
+
+    </body>
+
+</html>

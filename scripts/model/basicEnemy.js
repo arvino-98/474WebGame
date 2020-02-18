@@ -20,6 +20,11 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
     this.step = 0;
     this.spritePos = PLAYER_WIDTH / 4; // fix later...
     this.angle = 0;
+    this.speedIncrement = 25;
+
+    //this.distanceFromPlayer = 500; // init to large number
+    //this.playerXPos = 0;
+    //this.playerYPos = 0;
 
     this.updateDelta = function() {
         var a = getRndInteger(0, 3); // range [0, number of cases]
@@ -48,9 +53,56 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
         }
     }
 
+    this.updateDeltaTracked = function() {
+        var nextXPos = 5 * (this.xPos + this.dx);
+        var nextYPos = 5 * (this.yPos + this.dy);
+        this.dx = this.speedIncrement;
+        this.dy = this.speedIncrement;
+
+        if ( (Math.abs(nextXPos - this.playerXPos)+Math.abs(this.yPos - this.playerYPos)) < this.distanceFromPlayer ) {
+            this.dx *= 1;
+            this.dy *= 0;
+            this.angle = EAST;
+        } 
+        else if ((Math.abs(nextXPos - this.playerXPos)+Math.abs(this.yPos - this.playerYPos)) > this.distanceFromPlayer) {
+            this.dx *= -1;
+            this.dy *= 0;
+            this.angle = WEST;
+        }
+        else if ((Math.abs(this.xPos - this.playerXPos)+Math.abs(nextYPos - this.playerYPos)) < this.distanceFromPlayer) {
+            this.dx *= 0;
+            this.dy *= 1;
+            this.angle = SOUTH;
+        }
+        else if ((Math.abs(this.xPos - this.playerXPos)+Math.abs(nextYPos - this.playerYPos)) > this.distanceFromPlayer) {
+            this.dx *= 0;
+            this.dy *= -1;
+            this.angle = NORTH;
+        }
+    }
+
+    this.updateDeltaTracked2 = function() {
+        var nextXPos = 2 * (this.xPos + this.dx);
+        var nextYPos = 2 * (this.yPos + this.dy);
+        this.dx = this.speedIncrement;
+        this.dy = this.speedIncrement;
+
+        if ((Math.abs(nextXPos - this.playerXPos)+Math.abs(this.yPos - this.playerYPos)) > this.distanceFromPlayer) {
+            this.dx *= -1;
+            this.dy *= 0;
+            this.angle = WEST;
+        }
+        else if ((Math.abs(this.xPos - this.playerXPos)+Math.abs(nextYPos - this.playerYPos)) > this.distanceFromPlayer) {
+            this.dx *= 0;
+            this.dy *= -1;
+            this.angle = NORTH;
+        }
+    }
+
     this.updatePosition = function() {
+        //this.updateDeltaTracked();
         // change direction after a random number ofs steps
-        if (this.step % (Math.floor(getRndInteger(600, 800) / 2)) == 0 && this.alive) {
+        if (this.step % (Math.floor(getRndInteger(400, 600) / 2)) == 0 && this.alive) {
             this.updateDelta();
             this.dx *= gameState.environment.ground_drag_force;
             this.dy *= gameState.environment.ground_drag_force;
@@ -81,5 +133,8 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
             this.xPos = nextXPos;
             this.yPos = nextYPos;
         }
+
+        //this.distanceFromPlayer = Math.abs(this.xPos - this.playerXPos) + Math.abs(this.yPos - this.playerYPos);
+        //console.log(this.distanceFromPlayer)
     }
 }

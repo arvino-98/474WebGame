@@ -5,8 +5,6 @@ to internal game state.
 */
 let playerSpritePos = PLAYER_WIDTH / 5; // position of player sprite set
 const playerSpriteIncr = 36.8; // 37 41 36.8
-let tornadoAtkSpritePos = 403;
-const tornadoAtkSpriteIncr = 36.6;
 
 function updateCSSLoop() {
     updatePlayerCSS();
@@ -18,6 +16,7 @@ function updateCSSLoop() {
 function updatePlayerCSS(){
     // update player stamina text
     $("#playerStamina").css("width", Math.floor(gameState.player.stamina) + "%");
+    $("#playerHealth").css("width", Math.floor(gameState.player.health) + "%");
 
     // not attacking sprites
     if (!(gameState.player.attacking)) {
@@ -77,7 +76,7 @@ function updateBasicEnemyCSS(value, key, map) {
         // code to animate sprites upon movement
         document.getElementById(key).style.backgroundPosition = `-${value.spritePos}px 0px`;
         if (value.moving) {
-            if (value.step % 8 == 0) {
+            if (value.step % 6 == 0) {
                 value.spritePos += 64;
             }
         }

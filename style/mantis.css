@@ -16,12 +16,12 @@
     visibility: hidden;
 }
 
-#gameInfo{
+.gameInfo{
     padding-left: 15px;
     padding-top: 15px;
     width:300px;
     height:100px;
-    position:relative;
+    position: relative;;
 }   
 
 #player{
@@ -50,8 +50,9 @@
     width: 64px;
 }
 
-.meter { 
-	height: 20px;  /* Can be anything */
+#meter1 { 
+    height: 20px;  /* Can be anything */
+    width: 400px;
 	position: relative;
 	background: #555;
 	-moz-border-radius: 25px;
@@ -61,7 +62,20 @@
 	box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
 }
 
-.meter > span {
+#meter2 { 
+    top: 10px;
+    height: 20px;  /* Can be anything */
+    width: 400px;
+	position: relative;
+	background: #555;
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+	padding: 10px;
+	box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+}
+
+#playerStamina {
     display: block;
     height: 100%;
     border-top-right-radius: 8px;
@@ -74,4 +88,19 @@
       inset 0 -2px 6px rgba(0,0,0,0.4);
     position: relative;
     overflow: hidden;
-  }
+}
+
+#playerHealth {
+    display: block;
+    height: 100%;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: rgb(211, 21, 21);
+    box-shadow: 
+      inset 0 2px 9px  rgba(255,255,255,0.3),
+      inset 0 -2px 6px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+}

@@ -17,27 +17,29 @@ function Player() {
     this.attacking = false;
     this.sprinting = false;
     this.stamina = 100;
+    this.health = 100;
+    this.stuck = false;
 
     /*
     Update player velocity based on key presses
     */
     this.updateDelta = function() {
-        if (input.keyHandler.a) { // handle a
+        if (input.keyHandler.a && !this.stuck) { // handle a
             this.dx = -this.speed_increment;
             this.dy *= 0
             this.angle = WEST;
         }
-        if (input.keyHandler.d) { // handle d
+        if (input.keyHandler.d && !this.stuck) { // handle d
             this.dx = this.speed_increment;
             this.dy *= 0
             this.angle = EAST;
         }
-        if (input.keyHandler.w) { // handle w
+        if (input.keyHandler.w && !this.stuck) { // handle w
             this.dy = -this.speed_increment;
             this.dx *= 0
             this.angle = NORTH;
         }
-        if (input.keyHandler.s) { // handle s
+        if (input.keyHandler.s && !this.stuck) { // handle s
             this.dy = this.speed_increment;
             this.dx *= 0
             this.angle = SOUTH;
@@ -75,7 +77,7 @@ function Player() {
         // handle for sprinting action
         if (input.keyHandler.shift && this.moving && this.stamina > 2) {
             this.sprinting = true;
-            this.speed_increment = 40;
+            this.speed_increment = 35;
         } else {
             this.speed_increment = 15;
             input.keyHandler.shift = false;

@@ -43,7 +43,7 @@ function Input(){
                 key_handler.shift = state;
             }  
 
-            event.preventDefault(); // tells the program to ignore the default behavior of the keys
+            //event.preventDefault(); // tells the program to ignore the default behavior of the keys
         }
 
         return key_handler;

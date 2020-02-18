@@ -24,7 +24,7 @@ function GameState() {
         var e = new BasicEnemy(
             "basicEnemy" + (gameState.enemyMap.size + 1),
             30, 30,
-            20, 20,
+            64, 64,
             getRndInteger(100, 500), getRndInteger(100, 500),
             getRndInteger(-5, 5), getRndInteger(-5, 5),
             0, 0); 
@@ -48,29 +48,47 @@ and checks/handles collisions
 */
 function gameLoop() {
     gameState.player.update(); // update player
-    gameState.enemyMap.forEach(function(value, key, map) {value.updatePosition()}); // update all enemies in enemyMap
+
+    // update all enemies in enemyMap
+    gameState.enemyMap.forEach(function(value, key, map) {
+        value.playerXPos = gameState.player.xPos;
+        value.playerYPos = gameState.player.yPos;
+        value.updatePosition()
+    }); 
 
     // check for collisions between player and all enemies.
     gameState.enemyMap.forEach(
         function(value, key, map) {
             if (isCollide(gameState.player, value)) {
                 //console.log("collision detected: " + key)
+
                 if (gameState.player.attacking) {
                     value.alive = false;
 
+                    // set hidden for a split second gives appearance of being sucked in and blown away
                     $('#' + key).css("visibility", "hidden");
-                    setTimeout(function(){$('#' + key).css("visibility", "visible");}, 200);
+                    setTimeout(function(){$('#' + key).css("visibility", "visible");}, 150);
 
                     // send enemy flying in random direction
-                    value.dx = 5 * (getRndInteger(-2, 1) + 1); 
-                    value.dy = 5 * (getRndInteger(-2, 1) + 1);
+                    value.dx = (getRndInteger(-15, 15)); 
+                    value.dy = 10;
 
                     // remove from game after n msec
-                    setTimeout(function(){gameState.removeByID(key)}, 2000);
+                    setTimeout(function(){gameState.removeByID(key)}, 1500);
                 }
+
                 else {
                     // player takes damage?
+                    gameState.player.dx = value.dx * 20;
+                    gameState.player.dy = value.dy * 20;
+
+                    // disable plaer movement for a set time
+                    gameState.player.stuck = true;
+                    setTimeout(function() { gameState.player.stuck = false; }, 250);
+
+                    gameState.player.health -= .5;
                 }
+
             }
     });
 

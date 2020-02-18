@@ -10,18 +10,30 @@
 
     <body>
         <div id="mainContent">
+
             <div id="startScreen">
                 <button id="startGameButton" onclick="gameStart()">Start Game</button>
             </div>
+
             <div id = "gameToolbar">
                 <button id="restartGameButton" onclick="gameRestart()">Restart Game</button>
                 <button id="spawnEnemyButton" onclick="buttonSpawn()">Spawn Enemy</button>
                 <button id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
             </div>
+
             <div id="gameBoard">
+
+                <div id="gameInfo">
+                    <div class="meter">
+                        <span id="playerStamina"></span>
+                    </div>
+                </div>
+
                 <div id="player"></div>
                 <!-- Any game entities (enemies, obstacles, ...) generated in js should generally be appended here within gameBoard -->
+        
             </div>
+
         </div>
 
         <!-- All scripts below -->

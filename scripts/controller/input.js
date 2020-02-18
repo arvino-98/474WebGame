@@ -12,6 +12,7 @@ function Input(){
             s: false,
             d: false,
             space : false,
+            shift : false,
         };
 
         function KeyHandler(event) {
@@ -34,8 +35,12 @@ function Input(){
                 key_handler.d = state;
             }
             else if(event.keyCode == 32){ // space
-                console.log('pressed space');
+                //console.log('pressed space');
                 key_handler.space = state;
+            }  
+            else if(event.keyCode == 16){ // shift
+                //console.log('pressed shift');
+                key_handler.shift = state;
             }  
 
             event.preventDefault(); // tells the program to ignore the default behavior of the keys

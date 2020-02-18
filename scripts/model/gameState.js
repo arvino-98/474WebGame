@@ -55,8 +55,22 @@ function gameLoop() {
         function(value, key, map) {
             if (isCollide(gameState.player, value)) {
                 //console.log("collision detected: " + key)
-                // for now just remove enemy from game...
-                gameState.removeByID(key);
+                if (gameState.player.attacking) {
+                    value.alive = false;
+
+                    $('#' + key).css("visibility", "hidden");
+                    setTimeout(function(){$('#' + key).css("visibility", "visible");}, 200);
+
+                    // send enemy flying in random direction
+                    value.dx = 5 * (getRndInteger(-2, 1) + 1); 
+                    value.dy = 5 * (getRndInteger(-2, 1) + 1);
+
+                    // remove from game after n msec
+                    setTimeout(function(){gameState.removeByID(key)}, 2000);
+                }
+                else {
+                    // player takes damage?
+                }
             }
     });
 

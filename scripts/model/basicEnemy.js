@@ -15,6 +15,7 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
     this.dy = dy;
     this.strength = strength; // future use?
     this.health = health; // future use?
+    this.alive = true;
     this.moving = false;
     this.step = 0;
     this.spritePos = PLAYER_WIDTH / 4; // fix later...
@@ -49,7 +50,7 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
 
     this.updatePosition = function() {
         // change direction after a random number ofs steps
-        if (this.step % (Math.floor(getRndInteger(128, 256) / 2)) == 0) {
+        if (this.step % (Math.floor(getRndInteger(600, 800) / 2)) == 0 && this.alive) {
             this.updateDelta();
             this.dx *= gameState.environment.ground_drag_force;
             this.dy *= gameState.environment.ground_drag_force;
@@ -61,18 +62,24 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
         this.moving = nextXPos != this.xPos || nextYPos != this.yPos;
         if (this.moving) { this.step = (this.step + 1); }
 
-        // make sure enemy stays within board boundaries
-        if (nextXPos >= 0 && nextXPos + this.width <= BOARD_WIDTH) {
-            this.xPos = nextXPos;
-        } else {
-            this.dx *= -1;
-            this.angle *= -1;
+        // make sure enemy stays within board boundaries while alive
+        if (this.alive) {
+            if (nextXPos >= 0 && nextXPos + this.width <= BOARD_WIDTH) {
+                this.xPos = nextXPos;
+            } else {
+                this.dx *= -1;
+                this.angle *= -1;
+            }
+            if (nextYPos >= 0 && nextYPos + this.height <= BOARD_HEIGHT) {
+                this.yPos = nextYPos;
+            } else {
+                this.dy *= -1;
+                this.angle *= -1;
+            }
         }
-        if (nextYPos >= 0 && nextYPos + this.height <= BOARD_HEIGHT) {
+        else if (!this.alive){
+            this.xPos = nextXPos;
             this.yPos = nextYPos;
-        } else {
-            this.dy *= -1;
-            this.angle *= -1;
         }
     }
 }

@@ -19,7 +19,7 @@ function updatePlayerCSS(){
     $("#playerHealth").css("width", Math.floor(gameState.player.health) + "%");
 
     // not attacking sprites
-    if (!(gameState.player.attacking)) {
+    if (!gameState.player.attacking && gameState.player.health > 0) {
         $("#player").css("filter", "")
         // choose image set based on direction
         if (gameState.player.angle == NORTH) {
@@ -47,29 +47,42 @@ function updatePlayerCSS(){
         }
     }
     // attacking sprites
-    else if (gameState.player.attacking) {
+    else if (gameState.player.attacking && gameState.player.health > 0) {
         document.getElementById("player").style.backgroundPosition = `-8px 0px`;
         $("#player").css("filter", "drop-shadow(5px 13px 3px rgba(34, 34, 34, 0.70))")
         $("#player").css("background-image","url('../images/tornado_small.gif')");
     }
 
+    // dead player
+    else if (gameState.player.health <= 0) {
+        document.getElementById("player").style.backgroundPosition = `-4px 0px`;
+        $("#player").css("background-image","url('../images/dark_soldier_dead_shadow.png')");
+        $("#player").css("filter", "drop-shadow(5px 5px 3px rgba(34, 34, 34, 0.70))")
+        $("#player").css("height", "60")
+        $("#player").css("width", "55")
+    }
+
+    // update position
     $('#player').css('left', gameState.player.xPos + 'px');
     $('#player').css('top', gameState.player.yPos + 'px');
 }
 
+/*
+Update enemy css
+*/
 function updateBasicEnemyCSS(value, key, map) {
     if (value.alive) {
         // choose image set based on direction
-        if (value.angle == NORTH) {
+        if (value.dy < 0) {
             $("#" + key).css("background-image", "url('../images/spider_north.png')");
         }
-        else if (value.angle == EAST){
+        else if (value.dx > 0){
             $("#" + key).css("background-image","url('../images/spider_east.png')");
         }
-        else if (value.angle == WEST){
+        else if (value.dx < 0){
             $("#" + key).css("background-image","url('../images/spider_west.png')");
         }
-        else if (value.angle == SOUTH){
+        else if (value.dy >= 0){
             $("#" + key).css("background-image","url('../images/spider_south.png')");
         }
 

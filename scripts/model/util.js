@@ -1,11 +1,35 @@
 /*
-General utility functions/constants below...
+Constant declarations
 */
 const NORTH = 2;
 const EAST = -1;
 const SOUTH = -2;
 const WEST = 1;
 
+const BASIC_ENEMY_HITBOX_HEIGHT = 35;
+const BASIC_ENEMY_HITBOX_WIDTH = 35;
+const BASIC_ENEMY_DAMAGE = 2;
+const BASIC_ENEMY_MIN_DELTA_NEG = -30;
+const BASIC_ENEMY_MAX_DELTA_NEG = -15;
+const BASIC_ENEMY_MIN_DELTA = 15;
+const BASIC_ENEMY_MAX_DELTA = 30;
+const BASIC_ENEMY_BOUNCE_FACTOR = -1.009; // how much to change enemy velocity upon collision with another
+const BASIC_ENEMY_THROWN_SPEED = 10;
+
+const PLAYER_HITBOX_HEIGHT = 30;
+const PLAYER_HITBOX_WIDTH = 30;
+const PLAYER_WIDTH = $('#player').width();
+const PLAYER_HEIGHT = $('#player').height();
+const PLAYER_NORMAL_SPEED = 35;
+const PLAYER_SPRINT_SPEED = 55;
+const PLAYER_SPRINT_COST = 1.5;
+const PLAYER_TORNADO_COST = 3;
+const PLAYER_STAMINA_RECHARGE_DELAY = 1000; // in msec
+const PLAYER_STAMINA_RECHARGE_SPEED = .3;
+
+/*
+General utility functions/constants below...
+*/
 // print to console...
 function logEnemyMapSize() {
     console.log(gameState.enemyMap.size);
@@ -33,3 +57,7 @@ function isCollide(a, b) {
 function buttonSpawn() {
     gameState.spawnBasicEnemy();
 }
+function killPlayer() {
+    gameState.player.health = 0;
+}
+

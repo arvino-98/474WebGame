@@ -5,6 +5,9 @@ function gameStart(){
 }
 
 function gameEnd(){
+    $('#startScreen').css("visibility", "hidden");
+    $('#gameBoard').css("visibility", "hidden");
+    $('#deathScreen').css("visibility", "visible");
 }
 
 function gameRestart(){

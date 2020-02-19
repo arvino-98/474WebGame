@@ -80,8 +80,8 @@ function Player() {
 
         // update dx and dy
         this.updateDelta();
-        this.dx *= gameState.environment.ground_drag_force;
-        this.dy *= gameState.environment.ground_drag_force;
+        this.dx *= GROUND_DRAG_FORCE;
+        this.dy *= GROUND_DRAG_FORCE;
 
         // get next positons
         //console.log(this.angle);

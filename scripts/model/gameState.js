@@ -1,16 +1,19 @@
 /*
 Model of the internal game state.
 */
-BOARD_WIDTH = $('#gameBoard').width();
-BOARD_HEIGHT = $('#gameBoard').height();
 
 function GameState() {
     this.player = new Player();
-    this.environment = new Environment()
     this.enemyMap = new Map();
+    this.decorationMap = new Map();
 
     this.init = function() {
-        this.player.init(640, 500, 0, 0); 
+        this.player.init(640, 500, 0, 0);
+        
+        for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
+            this.spawnRandomDecoration();
+        }
+
         requestAnimationFrame(gameLoop); // loop
     }
 
@@ -22,14 +25,15 @@ function GameState() {
     this.spawnBasicEnemy = function() {
         // create new enemy
         var e = new BasicEnemy(
-            "basicEnemy" + (gameState.enemyMap.size + 1),
+            "basicEnemy" + (this.enemyMap.size + 1),
             30, 30,
             BASIC_ENEMY_HITBOX_WIDTH, BASIC_ENEMY_HITBOX_HEIGHT,
             getRndInteger(100, 500), getRndInteger(100, 500),
             getRndInteger(-5, 5), getRndInteger(-5, 5),
-            0, 0); 
+            0, 0
+        ); 
     
-        gameState.enemyMap.set(e.id, e); // add to map
+        this.enemyMap.set(e.id, e); // add to map
         $('#gameBoard').append("<div class='basicEnemy' id='" + e.id + "'></div>"); // add to html
     }
 
@@ -39,6 +43,25 @@ function GameState() {
     this.removeByID = function(id) {
         $('#' + id).remove(); // remove from html
         this.enemyMap.delete(id); // remove from map
+    }
+
+    this.spawnRandomDecoration = function() {
+        var randName = DECORATION_NAME_LIST[getRndInteger(0, DECORATION_NAME_LIST.length)];
+        var d = new Decoration(
+            randName + "_" + (this.decorationMap.size + 1),
+            randName,
+            0, 0,
+            0, 0,
+            getRndInteger(50, BOARD_WIDTH - 50), getRndInteger(50, BOARD_HEIGHT - 50),
+            getRndInteger(0, 360),
+            false
+        );
+
+        this.decorationMap.set(d.id, d);
+
+        console.log(this.decorationMap);
+
+        $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
     }
 }
 

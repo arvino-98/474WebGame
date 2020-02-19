@@ -11,6 +11,6 @@ function gameEnd(){
 }
 
 function gameRestart(){
-    var loc = $(location).attr('href')
+    var loc = $(location).attr('href');
     window.location.replace(loc);
 }

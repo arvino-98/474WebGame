@@ -57,8 +57,8 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
         // change direction after a random number ofs steps
         if (this.step % (Math.floor(getRndInteger(400, 600) / 2)) == 0 && this.alive) {
             this.updateDelta();
-            this.dx *= gameState.environment.ground_drag_force;
-            this.dy *= gameState.environment.ground_drag_force;
+            this.dx *= GROUND_DRAG_FORCE;
+            this.dy *= GROUND_DRAG_FORCE;
         }
 
         var nextXPos = this.xPos + this.dx;

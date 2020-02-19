@@ -1,10 +1,16 @@
 /*
 Constant declarations
 */
+const BOARD_WIDTH = $('#gameBoard').width();
+const BOARD_HEIGHT = $('#gameBoard').height();
+
 const NORTH = 2;
 const EAST = -1;
 const SOUTH = -2;
 const WEST = 1;
+
+const GROUND_DRAG_FORCE = 0.15;
+const NUMBER_OF_DECORATIONS = 40;
 
 const BASIC_ENEMY_HITBOX_HEIGHT = 35;
 const BASIC_ENEMY_HITBOX_WIDTH = 35;
@@ -28,8 +34,27 @@ const PLAYER_STAMINA_RECHARGE_DELAY = 1000; // in msec
 const PLAYER_STAMINA_RECHARGE_SPEED = .3;
 
 /*
-General utility functions/constants below...
+Names of all files in ./images/decoration
 */
+const DECORATION_NAME_LIST = [
+    "bones1",
+    "bones2",
+    "bones3",
+    "bones4",
+    "rock1",
+    "rock2",
+    "rock3",
+    "rock4",
+    "rock5",
+    "root1",
+    "root2",
+    "sticks1"
+];
+
+/*
+General utility functions below...
+*/
+
 // print to console...
 function logEnemyMapSize() {
     console.log(gameState.enemyMap.size);

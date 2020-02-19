@@ -9,6 +9,7 @@ const playerSpriteIncr = 36.8; // 37 41 36.8
 function updateCSSLoop() {
     updatePlayerCSS();
     gameState.enemyMap.forEach(updateBasicEnemyCSS);
+    gameState.decorationMap.forEach(loadDecorations);
 
     requestAnimationFrame(updateCSSLoop); // loop
 }
@@ -105,4 +106,12 @@ function updateBasicEnemyCSS(value, key, map) {
     $('#' + value.id).css('left', value.xPos + 'px');
     $('#' + value.id).css('top', value.yPos + 'px');
 
+}
+
+function loadDecorations(value, key, map) {
+    $("#" + value.id).css("background-image", "url('../images/decoration/" + value.name + ".png')");
+    $('#' + value.id).css('left', value.xPos + 'px');
+    $('#' + value.id).css('top', value.yPos + 'px');
+    $('#' + value.id).css('transform', "rotate(" + value.rotation + "deg)");
+    //console.log("load " + value.map_id)
 }

@@ -1,15 +1,12 @@
 /*
 Model of the internal game state.
 */
-
 function GameState() {
     this.player = new Player();
     this.enemyMap = new Map();
     this.decorationMap = new Map();
 
     this.init = function() {
-        this.player.init(640, 500, 0, 0);
-        
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
             this.spawnRandomDecoration();
         }
@@ -18,18 +15,18 @@ function GameState() {
     }
 
     /*
+    spawnBasicEnemy()
     Spawns an enemy entity by:
         - adding an ['id':enemy] keypair to enemyMap 
         - appending an enemy div to the #gameBoard div in the html
     */
-    this.spawnBasicEnemy = function() {
+    this.spawnBasicEnemy = function(xPos, yPos) {
         // create new enemy
         var e = new BasicEnemy(
             "basicEnemy" + (this.enemyMap.size + 1),
             30, 30,
             BASIC_ENEMY_HITBOX_WIDTH, BASIC_ENEMY_HITBOX_HEIGHT,
-            getRndInteger(100, 500), getRndInteger(100, 500),
-            getRndInteger(-5, 5), getRndInteger(-5, 5),
+            xPos, yPos,
             0, 0
         ); 
     
@@ -38,6 +35,7 @@ function GameState() {
     }
 
     /*
+    removeByID()
     Remove an enemy entity by ID
     */
     this.removeByID = function(id) {
@@ -45,6 +43,9 @@ function GameState() {
         this.enemyMap.delete(id); // remove from map
     }
 
+    /*
+    spawnRandomDecoration()
+    */
     this.spawnRandomDecoration = function() {
         var randName = DECORATION_NAME_LIST[getRndInteger(0, DECORATION_NAME_LIST.length)];
         var d = new Decoration(
@@ -58,9 +59,7 @@ function GameState() {
         );
 
         this.decorationMap.set(d.id, d);
-
-        console.log(this.decorationMap);
-
+        //console.log(this.decorationMap);
         $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
     }
 }
@@ -70,22 +69,23 @@ Main game loop that continuously updates entitities
 and checks/handles collisions
 */
 function gameLoop() {
-    gameState.player.update(); // update player
+    // update player
+    gameState.player.update();
 
-    // on player death
+    // check player death
     if (gameState.player.health <= 0) {
         //console.log("Player died");
         gameState.player.speed_increment = 0;
         gameState.player.dx = 0;
         gameState.player.dy = 0;
-        setTimeout(function() { gameEnd(); }, 7000);
+        setTimeout(function() { gameEnd(); }, GAME_END_TIMEOUT);
     }
 
     // update all enemies in enemyMap
     gameState.enemyMap.forEach(function(value, key, map) {
         value.playerXPos = gameState.player.xPos;
         value.playerYPos = gameState.player.yPos;
-        value.updatePosition()
+        value.update();
     }); 
 
     // check for collisions between player and all enemies.
@@ -107,12 +107,12 @@ function gameLoop() {
                     value.dy = BASIC_ENEMY_THROWN_SPEED;
 
                     // remove from game after n msec
-                    setTimeout(function(){gameState.removeByID(key)}, 1000);
+                    setTimeout(function(){gameState.removeByID(key)}, BASIC_ENEMY_REMOVE_TIMEOUT);
                 }
 
                 // if not attacking
                 else if (!gameState.player.attacking && gameState.player.health > 0){
-                    // player takes damage?
+                    // delta magnified to simulate pushback
                     gameState.player.dx = value.dx * 20;
                     gameState.player.dy = value.dy * 20;
 
@@ -127,10 +127,6 @@ function gameLoop() {
                 else if (gameState.player.health <= 0) {
                     //console.log("enemy collide dead player")
                     value.speed_increment = 0;
-                    value.min_delta_neg = 0;
-                    value.max_delta_neg = 0;
-                    value.min_delta = 0;
-                    value.max_delta = 0;
                     value.dx *= .90;
                     value.dy *= .90;
                 }
@@ -138,8 +134,10 @@ function gameLoop() {
             }
     });
 
-    // how to handle enemy collisions with each other?
+    // handle collision between enemies
+    /*
     gameState.enemyMap.forEach(function(value, key, map) {
+        // kinda shit...
         var a_value = value;
         var a_key = key;
         gameState.enemyMap.forEach(function(value, key, map) {
@@ -154,6 +152,7 @@ function gameLoop() {
             }
         });
     });
+    */
         
         
 

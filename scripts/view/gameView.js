@@ -23,16 +23,16 @@ function updatePlayerCSS(){
     if (!gameState.player.attacking && gameState.player.health > 0) {
         $("#player").css("filter", "")
         // choose image set based on direction
-        if (gameState.player.angle == NORTH) {
+        if (gameState.player.dy < 0) {
             $("#player").css("background-image", "url('../images/dark_soldier_north_shadow.png')");
         }
-        else if (gameState.player.angle == EAST){
+        else if (gameState.player.dx > 0){
             $("#player").css("background-image","url('../images/dark_soldier_east_shadow.png')");
         }
-        else if (gameState.player.angle == WEST){
+        else if (gameState.player.dx < 0){
             $("#player").css("background-image","url('../images/dark_soldier_west_shadow.png')");
         }
-        else if (gameState.player.angle == SOUTH){
+        else if (gameState.player.dy >= 0){
             $("#player").css("background-image","url('../images/dark_soldier_south_shadow.png')");
         }
 
@@ -56,11 +56,22 @@ function updatePlayerCSS(){
 
     // dead player
     else if (gameState.player.health <= 0) {
+        // change sprite to dead player
         document.getElementById("player").style.backgroundPosition = `-4px 0px`;
         $("#player").css("background-image","url('../images/dark_soldier_dead_shadow.png')");
-        $("#player").css("filter", "drop-shadow(5px 5px 3px rgba(34, 34, 34, 0.70))")
+        $("#player").css("filter", "drop-shadow(5px 5px 3px rgba(34, 34, 34, 0.9))")
         $("#player").css("height", "60")
         $("#player").css("width", "55")
+
+        // code for blood pool effect
+        $('#gameBoard').append("<div id='bloodPool'></div>");
+        $('#bloodPool').css("background-image","url('../images/blood_pool.gif')");
+        $("#bloodPool").css("position", "absolute");
+        $("#bloodPool").css("height", "120")
+        $("#bloodPool").css("width", "120");
+        $("#bloodPool").css("opacity", ".60");
+        $('#bloodPool').css('left', gameState.player.xPos-20 + 'px');
+        $('#bloodPool').css('top', gameState.player.yPos-20 + 'px');
     }
 
     // update position

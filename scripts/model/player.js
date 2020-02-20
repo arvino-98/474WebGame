@@ -3,12 +3,11 @@ function Player() {
     this.height = PLAYER_HEIGHT;
     this.hitboxWidth = PLAYER_HITBOX_WIDTH;
     this.hitboxHeight = PLAYER_HITBOX_HEIGHT;
-    this.xPos = 0;
-    this.yPos = 0;
+    this.xPos = PLAYER_INITIAL_X_POS;
+    this.yPos = PLAYER_INITIAL_Y_POS;
     this.dx = 0;
     this.dy = 0;
     this.speed_increment = PLAYER_NORMAL_SPEED;
-    this.angle = 0;
     this.moving = false;
     this.step = 0;
     this.attacking = false;
@@ -25,22 +24,18 @@ function Player() {
         if (input.keyHandler.a && !this.stuck) { // handle a
             this.dx = -this.speed_increment;
             this.dy *= 0
-            this.angle = WEST;
         }
         if (input.keyHandler.d && !this.stuck) { // handle d
             this.dx = this.speed_increment;
             this.dy *= 0
-            this.angle = EAST;
         }
         if (input.keyHandler.w && !this.stuck) { // handle w
             this.dy = -this.speed_increment;
             this.dx *= 0
-            this.angle = NORTH;
         }
         if (input.keyHandler.s && !this.stuck) { // handle s
             this.dy = this.speed_increment;
             this.dx *= 0
-            this.angle = SOUTH;
         }
     }
 
@@ -59,15 +54,17 @@ function Player() {
     */
     this.update = function() {
         // check stamina consuming actions and decrease stamina accordingly
-        // handle for attacking action
         if (this.health > 0) {
+
+            // handle attacking action
             if (input.keyHandler.space && this.stamina > 0) {
                 this.attacking = true;
                 this.stamina -= PLAYER_TORNADO_COST;
             } else {
                 this.attacking = false;
             }
-            // handle for sprinting action
+
+            // handle sprinting action
             if (input.keyHandler.shift && this.moving && this.stamina > 0) {
                 this.sprinting = true;
                 this.stamina -= PLAYER_SPRINT_COST;
@@ -83,14 +80,13 @@ function Player() {
         this.dx *= GROUND_DRAG_FORCE;
         this.dy *= GROUND_DRAG_FORCE;
 
-        // get next positons
-        //console.log(this.angle);
+        // get next positions
         var nextXPos = this.xPos + this.dx;
         var nextYPos = this.yPos + this.dy;
 
+        // increment step if moving
         this.moving = nextXPos != this.xPos || nextYPos != this.yPos;
         if (this.moving) { this.step = (this.step + 1); }
-        //console.log(this.step);
 
         // make sure player stays within board boundaries
         // if so set the next postions

@@ -4,23 +4,22 @@ Constant declarations
 const BOARD_WIDTH = $('#gameBoard').width();
 const BOARD_HEIGHT = $('#gameBoard').height();
 
-const NORTH = 2;
-const EAST = -1;
-const SOUTH = -2;
-const WEST = 1;
-
 const GROUND_DRAG_FORCE = 0.15;
-const NUMBER_OF_DECORATIONS = 40;
+const NUMBER_OF_DECORATIONS = 50; // number of random decorations to appear on board
+const GAME_END_TIMEOUT = 4000 // in msec
 
 const BASIC_ENEMY_HITBOX_HEIGHT = 35;
 const BASIC_ENEMY_HITBOX_WIDTH = 35;
-const BASIC_ENEMY_DAMAGE = 2;
-const BASIC_ENEMY_MIN_DELTA_NEG = -30;
-const BASIC_ENEMY_MAX_DELTA_NEG = -15;
-const BASIC_ENEMY_MIN_DELTA = 15;
-const BASIC_ENEMY_MAX_DELTA = 30;
-const BASIC_ENEMY_BOUNCE_FACTOR = -1.009; // how much to change enemy velocity upon collision with another
+const BASIC_ENEMY_DAMAGE = 5;
+const BASIC_ENEMY_MIN_DELTA_NEG = -30; // min negative velocity
+const BASIC_ENEMY_MAX_DELTA_NEG = -15; // max negative velocity
+const BASIC_ENEMY_MIN_DELTA = 15; // min postive velocity
+const BASIC_ENEMY_MAX_DELTA = 30; // max postive velocity
+//const BASIC_ENEMY_BOUNCE_FACTOR = -1.009; // how much to change enemy velocity upon collision with another
 const BASIC_ENEMY_THROWN_SPEED = 10;
+const BASIC_ENEMY_NORMAL_SPEED = 25;
+const BASIC_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
+const BASIC_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
 
 const PLAYER_HITBOX_HEIGHT = 30;
 const PLAYER_HITBOX_WIDTH = 30;
@@ -28,13 +27,17 @@ const PLAYER_WIDTH = $('#player').width();
 const PLAYER_HEIGHT = $('#player').height();
 const PLAYER_NORMAL_SPEED = 35;
 const PLAYER_SPRINT_SPEED = 55;
-const PLAYER_SPRINT_COST = 1.5;
-const PLAYER_TORNADO_COST = 3;
-const PLAYER_STAMINA_RECHARGE_DELAY = 1000; // in msec
-const PLAYER_STAMINA_RECHARGE_SPEED = .3;
+const PLAYER_SPRINT_COST = 1.5; // stamina cost of sprint
+const PLAYER_TORNADO_COST = 3; // stamina cost of tornado attack
+const PLAYER_STAMINA_RECHARGE_DELAY = 1500; // in msec
+const PLAYER_STAMINA_RECHARGE_SPEED = .6;
+const PLAYER_INITIAL_X_POS = 640;
+const PLAYER_INITIAL_Y_POS = 620;
 
 /*
 Names of all files in ./images/decoration
+Any names file named here as a chance to appear as 
+a random decoration on the board
 */
 const DECORATION_NAME_LIST = [
     "bones1",
@@ -80,7 +83,7 @@ function isCollide(a, b) {
 
 // for testing...
 function buttonSpawn() {
-    gameState.spawnBasicEnemy();
+    gameState.spawnBasicEnemy(640, 50);
 }
 function killPlayer() {
     gameState.player.health = 0;

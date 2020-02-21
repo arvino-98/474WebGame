@@ -31,8 +31,8 @@ const PLAYER_SPRINT_COST = 1.5; // stamina cost of sprint
 const PLAYER_TORNADO_COST = 3; // stamina cost of tornado attack
 const PLAYER_STAMINA_RECHARGE_DELAY = 1500; // in msec
 const PLAYER_STAMINA_RECHARGE_SPEED = .6;
-const PLAYER_INITIAL_X_POS = 640;
-const PLAYER_INITIAL_Y_POS = 620;
+const PLAYER_INITIAL_X_POS = 650;
+const PLAYER_INITIAL_Y_POS = 380;
 
 /*
 Names of all files in ./images/decoration
@@ -58,6 +58,20 @@ const DECORATION_SMALL_NAME_LIST = [
 const DECORATION_COLLIDABLE_NAME_LIST = [
     "tall_lantern_unlit_collidable"
 ]
+
+var DIAMOND = [[640,175], [640,425], [440,300], [840 , 300]];
+var CIRCLE = [[640,175], [640,425], [440,300], [840 , 300], [500, 400], [500, 200], [770, 400], [770, 200]];
+var RECTANGLE_LONG = [[240, 175], [440,175], [640,175], [840,175], [1040, 175], [240, 350], [440,350], [640,350], [840,350], [1040, 350]];
+var RECTANGLE_SPACED = [[240, 175], [640,175], [1040, 175], [440,350], [840,350]];
+function randomPosition() {
+    var a = getRndInteger(0, 3); // range [0, number of cases]
+    switch(a) {
+        case 0: return DIAMOND;
+        case 1: return RECTANGLE_LONG;
+        case 2: return RECTANGLE_SPACED;
+        case 3: return CIRCLE;
+    }
+}
 
 /*
 General utility functions below...

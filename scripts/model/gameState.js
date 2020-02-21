@@ -15,10 +15,7 @@ function GameState() {
             this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
         }
 
-        // spawn collidable decorations - just 'tall_lanterns' for now
-        for (var i = 0; i < 4; i++) {
-            this.spawnRandomDecoration(DECORATION_COLLIDABLE_NAME_LIST , 100, 160, 45, 45, 85, 0, true); // magic numbers fix later sry
-        }
+        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, randomPosition(), 0, true);
 
         requestAnimationFrame(gameLoop); // loop
     }
@@ -72,6 +69,53 @@ function GameState() {
         $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
         if (collidable) {
             $("#" + d.id).css("z-index", 5);
+        }
+     }
+
+     /*
+    spawnDecoration()
+    */
+    this.spawnDecoration = function(decorationName, width, height, hboxWidth, hboxHeight, xPos, yPos, rotation_max, collidable) {
+        var d = new Decoration(
+            decorationName + "_" + (this.decorationMap.size + 1),
+            decorationName,
+            width, height,
+            hboxWidth, hboxHeight,
+            xPos, yPos,
+            getRndInteger(0, rotation_max),
+            collidable
+        );
+
+        this.decorationMap.set(d.id, d);
+        //console.log(this.decorationMap);
+        $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
+        if (collidable) {
+            $("#" + d.id).css("z-index", 5);
+        }
+     }
+
+     /*
+    spawnDecorationShaped()
+    spicfy shape to spawn decoration by array defined as: [[xPos, Ypos] , [xPos, yPos], ...]
+    */
+    this.spawnDecorationShaped = function(decorationName, width, height, hboxWidth, hboxHeight, postitions, rotation_max, collidable) {
+        for (var i = 0; i < postitions.length; i++) {
+            var d = new Decoration(
+                decorationName + "_" + (this.decorationMap.size + 1),
+                decorationName,
+                width, height,
+                hboxWidth, hboxHeight,
+                postitions[i][0], postitions[i][1],
+                getRndInteger(0, rotation_max),
+                collidable
+            );
+    
+            this.decorationMap.set(d.id, d);
+            //console.log(this.decorationMap);
+            $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
+            if (collidable) {
+                $("#" + d.id).css("z-index", 5);
+            }
         }
      }
 
@@ -151,7 +195,7 @@ function gameLoop() {
     // handle collision between player and decorations
     gameState.decorationMap.forEach(
         function(value, key, map) {
-            if (isCollideDecoration(gameState.player, value, value.xPos, value.yPos+100) && value.collidable) {
+            if (isCollideDecoration(gameState.player, value, value.xPos+5, value.yPos+100) && value.collidable) {
                     gameState.player.dx *= -10;
                     gameState.player.dy *= -10;
 
@@ -165,8 +209,8 @@ function gameLoop() {
     gameState.enemyMap.forEach(function(a_value, a_key) {
         gameState.decorationMap.forEach(function(b_value, b_key) {
             if (isCollideDecoration(a_value, b_value, b_value.xPos, b_value.yPos+100) && b_value.collidable) {
-                a_value.dx *= -1.5;
-                a_value.dy *= -1.5;
+                a_value.dx *= -1.15;
+                a_value.dy *= -1.15;
             }
         });
     });

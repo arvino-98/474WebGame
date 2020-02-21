@@ -6,9 +6,18 @@ function GameState() {
     this.enemyMap = new Map();
     this.decorationMap = new Map();
 
+    /*
+    init()
+    */
     this.init = function() {
+        // spawn small decorations
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
-            this.spawnRandomDecoration();
+            this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
+        }
+
+        // spawn collidable decorations - just 'tall_lanterns' for now
+        for (var i = 0; i < 4; i++) {
+            this.spawnRandomDecoration(DECORATION_COLLIDABLE_NAME_LIST , 100, 160, 45, 45, 85, 0, true); // magic numbers fix later sry
         }
 
         requestAnimationFrame(gameLoop); // loop
@@ -46,23 +55,28 @@ function GameState() {
     /*
     spawnRandomDecoration()
     */
-    this.spawnRandomDecoration = function() {
-        var randName = DECORATION_NAME_LIST[getRndInteger(0, DECORATION_NAME_LIST.length)];
+    this.spawnRandomDecoration = function(decorationNameList, width, height, hboxWidth, hboxHeight, padding, rotation_max, collidable) {
+        var randName = decorationNameList[getRndInteger(0, decorationNameList.length)];
         var d = new Decoration(
             randName + "_" + (this.decorationMap.size + 1),
             randName,
-            0, 0,
-            0, 0,
-            getRndInteger(50, BOARD_WIDTH - 50), getRndInteger(50, BOARD_HEIGHT - 50),
-            getRndInteger(0, 360),
-            false
+            width, height,
+            hboxWidth, hboxHeight,
+            getRndInteger(padding, BOARD_WIDTH - padding), getRndInteger(padding, BOARD_HEIGHT - padding),
+            getRndInteger(0, rotation_max),
+            collidable
         );
 
         this.decorationMap.set(d.id, d);
         //console.log(this.decorationMap);
         $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
-    }
+        if (collidable) {
+            $("#" + d.id).css("z-index", 5);
+        }
+     }
+
 }
+
 
 /*
 Main game loop that continuously updates entitities
@@ -120,19 +134,43 @@ function gameLoop() {
                     gameState.player.stuck = true;
                     setTimeout(function() { gameState.player.stuck = false; }, 250);
 
+                    // take damage
                     gameState.player.health -= value.damage;
-                }
 
-                //if player dead. slow and stop the enemy that killed him
-                else if (gameState.player.health <= 0) {
-                    //console.log("enemy collide dead player")
-                    value.speed_increment = 0;
-                    value.dx *= .90;
-                    value.dy *= .90;
+                    // show blood splatter effect
+                    $('#bloodSplash').css("top", gameState.player.yPos + "px");
+                    $('#bloodSplash').css("left", gameState.player.xPos-10 + "px");
+                    $('#bloodSplash').css('transform', "rotate(" + getRndInteger(0, 360) + "deg)");
+                    $('#bloodSplash').css("visibility", "visible");
+                    setTimeout(function(){ $('#bloodSplash').css("visibility", "hidden") }, 300);
                 }
 
             }
     });
+
+    // handle collision between player and decorations
+    gameState.decorationMap.forEach(
+        function(value, key, map) {
+            if (isCollideDecoration(gameState.player, value, value.xPos, value.yPos+100) && value.collidable) {
+                    gameState.player.dx *= -10;
+                    gameState.player.dy *= -10;
+
+                    // disable player movement for a set time
+                    gameState.player.stuck = true;
+                    setTimeout(function() { gameState.player.stuck = false; }, 200);
+            }
+    });
+
+    // handle collision between enemy and decoration
+    gameState.enemyMap.forEach(function(a_value, a_key) {
+        gameState.decorationMap.forEach(function(b_value, b_key) {
+            if (isCollideDecoration(a_value, b_value, b_value.xPos, b_value.yPos+100) && b_value.collidable) {
+                a_value.dx *= -1.5;
+                a_value.dy *= -1.5;
+            }
+        });
+    });
+    
 
     // handle collision between enemies
     /*
@@ -154,9 +192,5 @@ function gameLoop() {
     });
     */
         
-        
-
     requestAnimationFrame(gameLoop); // loop
 }
-
-

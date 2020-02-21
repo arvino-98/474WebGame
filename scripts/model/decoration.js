@@ -1,4 +1,4 @@
-function Decoration(id, name, width, height, hboxWidth, hboxHeight, xPos, yPos, rotation, obstacle) {
+function Decoration(id, name, width, height, hboxWidth, hboxHeight, xPos, yPos, rotation, collidable) {
     this.id = id;
     this.name = name;
     this.width = width;
@@ -8,5 +8,5 @@ function Decoration(id, name, width, height, hboxWidth, hboxHeight, xPos, yPos, 
     this.xPos = xPos;
     this.yPos = yPos;
     this.rotation = rotation;
-    this.obstacle = obstacle; // true if collision logic, else false
+    this.collidable = collidable; // true if collision logic, else false
 }

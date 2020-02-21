@@ -10,7 +10,7 @@ const GAME_END_TIMEOUT = 4000 // in msec
 
 const BASIC_ENEMY_HITBOX_HEIGHT = 35;
 const BASIC_ENEMY_HITBOX_WIDTH = 35;
-const BASIC_ENEMY_DAMAGE = 5;
+const BASIC_ENEMY_DAMAGE = 3;
 const BASIC_ENEMY_MIN_DELTA_NEG = -30; // min negative velocity
 const BASIC_ENEMY_MAX_DELTA_NEG = -15; // max negative velocity
 const BASIC_ENEMY_MIN_DELTA = 15; // min postive velocity
@@ -39,7 +39,8 @@ Names of all files in ./images/decoration
 Any names file named here as a chance to appear as 
 a random decoration on the board
 */
-const DECORATION_NAME_LIST = [
+// small decorations: ~15px x 15px
+const DECORATION_SMALL_NAME_LIST = [
     "bones1",
     "bones2",
     "bones3",
@@ -53,6 +54,10 @@ const DECORATION_NAME_LIST = [
     "root2",
     "sticks1"
 ];
+
+const DECORATION_COLLIDABLE_NAME_LIST = [
+    "tall_lantern_unlit_collidable"
+]
 
 /*
 General utility functions below...
@@ -78,6 +83,15 @@ function isCollide(a, b) {
         (a.yPos > (b.yPos + b.hitboxHeight)) ||
         ((a.xPos + a.hitboxWidth) < b.xPos) ||
         (a.xPos > (b.xPos + b.hitboxWidth))
+    );
+}
+
+function isCollideDecoration(player, collidable_decoration, decor_xPos, decor_yPos) {
+    return !(
+        ((player.yPos + player.hitboxHeight) < (decor_yPos)) ||
+        (player.yPos > (decor_yPos + collidable_decoration.hitboxHeight)) ||
+        ((player.xPos + player.hitboxWidth) < decor_xPos) ||
+        (player.xPos > (decor_xPos + collidable_decoration.hitboxWidth))
     );
 }
 

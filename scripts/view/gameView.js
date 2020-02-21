@@ -121,6 +121,8 @@ function updateBasicEnemyCSS(value, key, map) {
 
 function loadDecorations(value, key, map) {
     $("#" + value.id).css("background-image", "url('../images/decoration/" + value.name + ".png')");
+    $('#' + value.id).css('height', value.height + 'px');
+    $('#' + value.id).css('width', value.width + 'px');
     $('#' + value.id).css('left', value.xPos + 'px');
     $('#' + value.id).css('top', value.yPos + 'px');
     $('#' + value.id).css('transform', "rotate(" + value.rotation + "deg)");

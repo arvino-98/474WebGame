@@ -20,7 +20,7 @@ const BASIC_ENEMY_MAX_DELTA = 30; // max postive velocity
 //const BASIC_ENEMY_BOUNCE_FACTOR = -1.009; // how much to change enemy velocity upon collision with another
 const BASIC_ENEMY_THROWN_SPEED = 10;
 const BASIC_ENEMY_NORMAL_SPEED = 25;
-const BASIC_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
+const BASIC_ENEMY_CHASE_FACTOR = 80; // [0, 100] - the higher, the more aggressively enemy will chase player
 const BASIC_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
 
 /* Constants for caster enemy */

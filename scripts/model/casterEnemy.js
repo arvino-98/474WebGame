@@ -89,12 +89,24 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
         var b = getRndInteger(0, 100)
         if (this.dx == 0 && this.dy == 0 && b <= 1) {this.spawnProjectile();};
 
+        // update caster's projectiles
         this.projectileMap.forEach(function (value, key, map) {
-            console.log("update: " + value.id)
+            //console.log("update: " + value.id)
             value.update();
-            if (value.lifespan <= 0) {
+
+            // remove from game if lifespan reaches 0
+            if (value.lifespan <= 0 || value.outsideBoard) {
                 $('#' + value.id).remove(); // remove from html
                 map.delete(value.id); // remove from map
+            }
+
+            // fire trail effect
+            var randID = getRndInteger(0, 1000000);
+            if (getRndInteger(0, 100) <= 100) {
+                //$('#gameBoard').append("<div class='fireTrail' id='fireTrail" + randID + "'></div>"); // add to html
+                //$('#fireTrail' + randID).css('left', value.xPos + 'px');
+                //$('#fireTrail' + randID).css('top', value.yPos + 'px');
+                //setTimeout(function () {$('#fireTrail' + randID).remove()}, 500);
             }
         });
 

@@ -12,6 +12,7 @@ function CasterProjectile(id, width, height, hboxWidth, hboxHeight, xPos, yPos, 
 
     this.damage = CASTER_P_ENEMY_DAMAGE;
     this.lifespan = CASTER_P_ENEMY_LIFESPAN; // how long projectile stays in game
+    this.outsideBoard = false;
 
     // probably unnecessary
     this.updateDelta = function() {
@@ -19,8 +20,17 @@ function CasterProjectile(id, width, height, hboxWidth, hboxHeight, xPos, yPos, 
     }
 
     this.update = function() {
-        this.xPos += this.dx;
-        this.yPos += this.dy;
+        var nextXPos = this.xPos + this.dx;
+        var nextYPos = this.yPos + this.dy;
+
+        // make sure projectile stays within board boundaries
+        if (nextXPos <= 0 || nextXPos + this.width >= BOARD_WIDTH || nextYPos <= 0 || nextYPos + this.height >= BOARD_HEIGHT) {
+            this.outsideBoard = true;
+        } else {
+            this.xPos = nextXPos;
+            this.yPos = nextYPos; 
+        }
+
         this.lifespan -= 1;
     }
 

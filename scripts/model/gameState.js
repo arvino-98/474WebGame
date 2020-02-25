@@ -164,7 +164,7 @@ function gameLoop() {
         value.update();
     }); 
 
-    // update all enemies in caterEnemyMap
+    // update all enemies in casterEnemyMap
     gameState.casterEnemyMap.forEach(function(value, key, map) {
         value.playerXPos = gameState.player.xPos;
         value.playerYPos = gameState.player.yPos;
@@ -190,7 +190,7 @@ function gameLoop() {
 playerBloodSplashEffect()
 Creates a blood splash effect behind player sprite
 */
-function playerBloodSplatterEffect() {
+function playerBloodSplashEffect() {
     $('#bloodSplash').css("top", gameState.player.yPos + "px");
     $('#bloodSplash').css("left", gameState.player.xPos-10 + "px");
     $('#bloodSplash').css('transform', "rotate(" + getRndInteger(0, 360) + "deg)");
@@ -264,15 +264,12 @@ function checkPlayerCasterEnemyCollision() {
         value.projectileMap.forEach(function(proj_value, proj_key, proj_map) {
             if (isCollide(gameState.player, proj_value) && gameState.player.health > 0) {
                 if (gameState.player.attacking) {
-                    value.alive = false;
                     // set hidden for a split second gives appearance of being sucked in and blown away
                     $('#' + key).css("visibility", "hidden");
                     setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
                     // send enemy flying in random direction
-                    value.dx = getRndInteger(-5, 5); 
-                    value.dy = CASTER_ENEMY_THROWN_SPEED;
-                    // remove from game after n msec
-                    setTimeout(function(){gameState.removeByID(key)}, CASTER_ENEMY_REMOVE_TIMEOUT);
+                    proj_value.dx = getRndInteger(-5, 5); 
+                    proj_value.dy = CASTER_ENEMY_THROWN_SPEED;
                 } 
                 else if (!gameState.player.attacking) {
                     // take damage

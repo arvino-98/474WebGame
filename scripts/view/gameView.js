@@ -171,6 +171,7 @@ function updateCasterEnemyCSS(value, key, map) {
 }
 
 function updateCasterProjectileCSS(value, key, map) {
+    $('#' + value.id).css('transform',"rotate(90deg)")
     $('#' + value.id).css('left', value.xPos + 'px');
     $('#' + value.id).css('top', value.yPos + 'px');
 }

@@ -76,10 +76,10 @@
 
 .casterProjectile {
     position:absolute;
-    background-image: url('../images/tornado_small.gif'); 
+    background: url('../images/boulder.png'); 
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
-    height: 64px;
-    width: 64px;
+    height: 21px;
+    width: 21px;
     z-index: 5;
 }
 
@@ -156,4 +156,12 @@
     width: 50px;
     visibility: hidden;
     filter: drop-shadow(3px 8px 5px rgba(187, 31, 31, 0.26));
+}
+
+.fireTrail {
+    position: absolute;
+    background: url("../images/fire.gif");
+    height: 35px;
+    width: 48px;
+    z-index: 1;
 }

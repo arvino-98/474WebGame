@@ -1,6 +1,7 @@
 /*
 Constant declarations
 */
+
 const BOARD_WIDTH = $('#gameBoard').width();
 const BOARD_HEIGHT = $('#gameBoard').height();
 
@@ -8,6 +9,7 @@ const GROUND_DRAG_FORCE = 0.15;
 const NUMBER_OF_DECORATIONS = 50; // number of random decorations to appear on board
 const GAME_END_TIMEOUT = 4000 // in msec
 
+/* Constants for basic enemy */
 const BASIC_ENEMY_HITBOX_HEIGHT = 35;
 const BASIC_ENEMY_HITBOX_WIDTH = 35;
 const BASIC_ENEMY_DAMAGE = 3;
@@ -20,6 +22,27 @@ const BASIC_ENEMY_THROWN_SPEED = 10;
 const BASIC_ENEMY_NORMAL_SPEED = 25;
 const BASIC_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
 const BASIC_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
+
+/* Constants for caster enemy */
+const CASTER_ENEMY_HITBOX_HEIGHT = 35;
+const CASTER_ENEMY_HITBOX_WIDTH = 35;
+const CASTER_ENEMY_DAMAGE = 0;
+const CASTER_ENEMY_MIN_DELTA_NEG = -30; // min negative velocity
+const CASTER_ENEMY_MAX_DELTA_NEG = -15; // max negative velocity
+const CASTER_ENEMY_MIN_DELTA = 15; // min postive velocity
+const CASTER_ENEMY_MAX_DELTA = 30; // max postive velocity
+const CASTER_ENEMY_THROWN_SPEED = 10;
+const CASTER_ENEMY_NORMAL_SPEED = 25;
+const CASTER_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
+const CASTER_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
+const CASTER_ENEMY_PROJECTILE_VARIANCE = 3; // higher number leads to more spread for spawned projectiles
+const CASTER_ENEMY_PROJECTILE_SPEED_DIVISOR = 65; // higher number leads to slower projectiles
+
+/* Constants for caster projectiles*/
+const CASTER_P_ENEMY_HITBOX_HEIGHT = 35;
+const CASTER_P_ENEMY_HITBOX_WIDTH = 35;
+const CASTER_P_ENEMY_DAMAGE = 2;
+const CASTER_P_ENEMY_LIFESPAN = 200; // how long projectile lasts in game
 
 const PLAYER_HITBOX_HEIGHT = 30;
 const PLAYER_HITBOX_WIDTH = 30;
@@ -110,8 +133,11 @@ function isCollideDecoration(player, collidable_decoration, decor_xPos, decor_yP
 }
 
 // for testing...
-function buttonSpawn() {
+function buttonSpawnBasic() {
     gameState.spawnBasicEnemy(640, 50);
+}
+function buttonSpawnCaster() {
+    gameState.spawnCasterEnemy(450, 50);
 }
 function killPlayer() {
     gameState.player.health = 0;

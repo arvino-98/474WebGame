@@ -4,6 +4,7 @@ Model of the internal game state.
 function GameState() {
     this.player = new Player();
     this.enemyMap = new Map();
+    this.casterEnemyMap = new Map()
     this.decorationMap = new Map();
 
     /*
@@ -14,7 +15,6 @@ function GameState() {
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
             this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
         }
-
         this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, randomPosition(), 0, true);
 
         requestAnimationFrame(gameLoop); // loop
@@ -38,6 +38,24 @@ function GameState() {
     
         this.enemyMap.set(e.id, e); // add to map
         $('#gameBoard').append("<div class='basicEnemy' id='" + e.id + "'></div>"); // add to html
+    }
+
+    /*
+    spawnCasterEnemy()
+    Spawns an enemy entity in the same fashion as spawnBasicEnemy()
+    */
+   this.spawnCasterEnemy = function(xPos, yPos) {
+    // create new enemy
+    var e = new CasterEnemy(
+        "casterEnemy" + (this.casterEnemyMap.size + 1),
+        30, 30,
+        CASTER_ENEMY_HITBOX_WIDTH, CASTER_ENEMY_HITBOX_HEIGHT,
+        xPos, yPos,
+        0, 0
+    ); 
+
+        this.casterEnemyMap.set(e.id, e); // add to map
+        $('#gameBoard').append("<div class='casterEnemy' id='" + e.id + "'></div>"); // add to html
     }
 
     /*
@@ -121,8 +139,8 @@ function GameState() {
 
 }
 
-
 /*
+gameLoop()
 Main game loop that continuously updates entitities
 and checks/handles collisions
 */
@@ -146,66 +164,161 @@ function gameLoop() {
         value.update();
     }); 
 
-    // check for collisions between player and all enemies.
-    gameState.enemyMap.forEach(
-        function(value, key, map) {
-            if (isCollide(gameState.player, value)) {
-                //console.log("collision detected: " + key)
-
-                // if attacking
-                if (gameState.player.attacking && gameState.player.health > 0) {
-                    value.alive = false;
-
-                    // set hidden for a split second gives appearance of being sucked in and blown away
-                    $('#' + key).css("visibility", "hidden");
-                    setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
-
-                    // send enemy flying in random direction
-                    value.dx = getRndInteger(-5, 5); 
-                    value.dy = BASIC_ENEMY_THROWN_SPEED;
-
-                    // remove from game after n msec
-                    setTimeout(function(){gameState.removeByID(key)}, BASIC_ENEMY_REMOVE_TIMEOUT);
-                }
-
-                // if not attacking
-                else if (!gameState.player.attacking && gameState.player.health > 0){
-                    // delta magnified to simulate pushback
-                    gameState.player.dx = value.dx * 20;
-                    gameState.player.dy = value.dy * 20;
-
-                    // disable plaer movement for a set time
-                    gameState.player.stuck = true;
-                    setTimeout(function() { gameState.player.stuck = false; }, 250);
-
-                    // take damage
-                    gameState.player.health -= value.damage;
-
-                    // show blood splatter effect
-                    $('#bloodSplash').css("top", gameState.player.yPos + "px");
-                    $('#bloodSplash').css("left", gameState.player.xPos-10 + "px");
-                    $('#bloodSplash').css('transform', "rotate(" + getRndInteger(0, 360) + "deg)");
-                    $('#bloodSplash').css("visibility", "visible");
-                    setTimeout(function(){ $('#bloodSplash').css("visibility", "hidden") }, 300);
-                }
-
-            }
+    // update all enemies in caterEnemyMap
+    gameState.casterEnemyMap.forEach(function(value, key, map) {
+        value.playerXPos = gameState.player.xPos;
+        value.playerYPos = gameState.player.yPos;
+        value.playerDx = gameState.player.dx;
+        value.playerDy = gameState.player.dy;
+        value.update();
     });
 
-    // handle collision between player and decorations
+    // handle and check for collisions between:
+    // player and all enemies
+    checkPlayerBasicEnemyCollision();
+    // player and decorations
+    checkPlayerDecorationCollision()
+    // player and caster enemies
+    checkPlayerCasterEnemyCollision();
+    // enemies and decorations
+    checkEnemyDecorationCollision()
+
+    requestAnimationFrame(gameLoop); // loop
+}
+
+/*
+playerBloodSplashEffect()
+Creates a blood splash effect behind player sprite
+*/
+function playerBloodSplatterEffect() {
+    $('#bloodSplash').css("top", gameState.player.yPos + "px");
+    $('#bloodSplash').css("left", gameState.player.xPos-10 + "px");
+    $('#bloodSplash').css('transform', "rotate(" + getRndInteger(0, 360) + "deg)");
+    $('#bloodSplash').css("visibility", "visible");
+    setTimeout(function(){ $('#bloodSplash').css("visibility", "hidden") }, 300);
+}
+
+/*
+checkPlayerBasicEnemyCollision()
+checks and handles collisions between the player and all enemies in enemy map
+*/
+function checkPlayerBasicEnemyCollision() {
+    gameState.enemyMap.forEach(function(value, key, map) {
+        if (isCollide(gameState.player, value)) {
+            //console.log("collision detected: " + key)
+            // if attacking
+            if (gameState.player.attacking && gameState.player.health > 0) {
+                value.alive = false;
+                // set hidden for a split second gives appearance of being sucked in and blown away
+                $('#' + key).css("visibility", "hidden");
+                setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
+                // send enemy flying in random direction
+                value.dx = getRndInteger(-5, 5); 
+                value.dy = BASIC_ENEMY_THROWN_SPEED;
+                // remove from game after n msec
+                setTimeout(function(){gameState.removeByID(key)}, BASIC_ENEMY_REMOVE_TIMEOUT);
+            }
+
+            // if not attacking
+            else if (!gameState.player.attacking && gameState.player.health > 0){
+                // delta magnified to simulate pushback
+                gameState.player.dx = value.dx * 20;
+                gameState.player.dy = value.dy * 20;
+                // disable plaer movement for a set time
+                gameState.player.stuck = true;
+                setTimeout(function() { gameState.player.stuck = false; }, 250);
+                // take damage
+                gameState.player.health -= value.damage;
+                // show blood splatter effect
+                playerBloodSplashEffect();
+            }
+        }
+    });
+}
+
+/*
+checkPlayerDecorationCollision()
+checks and handles collisions between the player and all decorations in decoration map
+*/
+function checkPlayerDecorationCollision() {
     gameState.decorationMap.forEach(
         function(value, key, map) {
             if (isCollideDecoration(gameState.player, value, value.xPos+5, value.yPos+100) && value.collidable) {
                     gameState.player.dx *= -10;
                     gameState.player.dy *= -10;
-
                     // disable player movement for a set time
                     gameState.player.stuck = true;
                     setTimeout(function() { gameState.player.stuck = false; }, 200);
             }
     });
+}
 
-    // handle collision between enemy and decoration
+/*
+checkPlayerCasterEnemyCollision()
+checks and handles collisions between the player and all enemies in enemy map
+*/
+function checkPlayerCasterEnemyCollision() {
+    // handle collision between player and caster enemies
+    gameState.casterEnemyMap.forEach(function(value, key, map) {
+        // handle collision between player and caster projectiles
+        value.projectileMap.forEach(function(proj_value, proj_key, proj_map) {
+            if (isCollide(gameState.player, proj_value) && gameState.player.health > 0) {
+                if (gameState.player.attacking) {
+                    value.alive = false;
+                    // set hidden for a split second gives appearance of being sucked in and blown away
+                    $('#' + key).css("visibility", "hidden");
+                    setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
+                    // send enemy flying in random direction
+                    value.dx = getRndInteger(-5, 5); 
+                    value.dy = CASTER_ENEMY_THROWN_SPEED;
+                    // remove from game after n msec
+                    setTimeout(function(){gameState.removeByID(key)}, CASTER_ENEMY_REMOVE_TIMEOUT);
+                } 
+                else if (!gameState.player.attacking) {
+                    // take damage
+                    gameState.player.health -= proj_value.damage;
+                    // show blood splatter effect
+                    playerBloodSplashEffect();
+                }   
+            }
+        });
+        // handle collision between player and caster enemy
+        if (isCollide(gameState.player, value)) {
+            // if attacking
+            if (gameState.player.attacking && gameState.player.health > 0) {
+                value.alive = false;
+                // set hidden for a split second gives appearance of being sucked in and blown away
+                $('#' + key).css("visibility", "hidden");
+                setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
+                // send enemy flying in random direction
+                value.dx = getRndInteger(-5, 5); 
+                value.dy = BASIC_ENEMY_THROWN_SPEED;
+                // remove from game after n msec
+                setTimeout(function(){gameState.removeByID(key)}, CASTER_ENEMY_REMOVE_TIMEOUT);
+            }
+            // if not attacking
+            else if (!gameState.player.attacking && gameState.player.health > 0){
+                // delta magnified to simulate pushback
+                gameState.player.dx = value.dx * 20;
+                gameState.player.dy = value.dy * 20;
+
+                // disable plaer movement for a set time
+                gameState.player.stuck = true;
+                setTimeout(function() { gameState.player.stuck = false; }, 250);
+                // take damage
+                gameState.player.health -= value.damage;
+                // show blood splatter effect
+                playerBloodSplashEffect();
+            }
+        }
+    });
+}
+
+/*
+checkEnemyDecorationCollision()
+checks and handles collisions between the player and all enemies in enemy map
+*/
+function checkEnemyDecorationCollision() {
     gameState.enemyMap.forEach(function(a_value, a_key) {
         gameState.decorationMap.forEach(function(b_value, b_key) {
             if (isCollideDecoration(a_value, b_value, b_value.xPos, b_value.yPos+100) && b_value.collidable) {
@@ -213,28 +326,5 @@ function gameLoop() {
                 a_value.dy *= -1.15;
             }
         });
-    });
-    
-
-    // handle collision between enemies
-    /*
-    gameState.enemyMap.forEach(function(value, key, map) {
-        // kinda shit...
-        var a_value = value;
-        var a_key = key;
-        gameState.enemyMap.forEach(function(value, key, map) {
-            b_value = value;
-            b_key = key;
-            if (a_key != b_key) {
-                if (isCollide(a_value, b_value)) {
-                    console.log("enemy collide");
-                    b_value.dx *= BASIC_ENEMY_BOUNCE_FACTOR;
-                    b_value.dy *= BASIC_ENEMY_BOUNCE_FACTOR;
-                }  
-            }
-        });
-    });
-    */
-        
-    requestAnimationFrame(gameLoop); // loop
+    }); 
 }

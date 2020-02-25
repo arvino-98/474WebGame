@@ -20,7 +20,8 @@
             </div>
 
             <div id = "gameToolbar">
-                <button id="spawnEnemyButton" onclick="buttonSpawn()">Spawn Enemy</button>
+                <button id="spawnEnemyButton" onclick="buttonSpawnBasic()">Spawn Enemy</button>
+                <button id="spawnCasterButton" onclick="buttonSpawnCaster()">Spawn Caster Enemy</button>
                 <button id="killPlayerButton" onclick="killPlayer()">Suicide</button>
                 <button id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
             </div>
@@ -53,6 +54,8 @@
         <script type='text/javascript' src="./scripts/model/basicEnemy.js"></script>
         <script type='text/javascript' src="./scripts/model/util.js"></script>
         <script type='text/javascript' src="./scripts/model/decoration.js"></script>
+        <script type='text/javascript' src="./scripts/model/casterEnemy.js"></script>
+        <script type='text/javascript' src="./scripts/model/casterProjectile.js"></script>
         <!-- View -->
         <script type='text/javascript' src="./scripts/view/gameView.js"></script>
         <!-- Main -->

@@ -10,6 +10,11 @@ function updateCSSLoop() {
     updatePlayerCSS();
     gameState.enemyMap.forEach(updateBasicEnemyCSS);
     gameState.decorationMap.forEach(loadDecorations);
+    
+    gameState.casterEnemyMap.forEach(function(value, key, map) {
+        updateCasterEnemyCSS(value, key, map);
+        value.projectileMap.forEach(updateCasterProjectileCSS);
+    });
 
     requestAnimationFrame(updateCSSLoop); // loop
 }
@@ -127,4 +132,45 @@ function loadDecorations(value, key, map) {
     $('#' + value.id).css('top', value.yPos + 'px');
     $('#' + value.id).css('transform', "rotate(" + value.rotation + "deg)");
     //console.log("load " + value.map_id)
+}
+
+function updateCasterEnemyCSS(value, key, map) {
+    if (value.alive) {
+        // choose image set based on direction
+        if (value.dy < 0) {
+            $("#" + key).css("background-image", "url('../images/spider_north.png')");
+        }
+        else if (value.dx > 0){
+            $("#" + key).css("background-image","url('../images/spider_east.png')");
+        }
+        else if (value.dx < 0){
+            $("#" + key).css("background-image","url('../images/spider_west.png')");
+        }
+        else if (value.dy >= 0){
+            $("#" + key).css("background-image","url('../images/spider_south.png')");
+        }
+
+        // code to animate sprites upon movement
+        document.getElementById(key).style.backgroundPosition = `-${value.spritePos}px 0px`;
+        if (value.moving) {
+            if (value.step % 6 == 0) {
+                value.spritePos += 64;
+            }
+        }
+        else {
+            value.spritePos = 0;
+        }
+    }
+    else {
+        $("#" + key).css("filter", "drop-shadow(5px 20px 0px rgba(34, 34, 34, 1))");
+    }
+
+    //console.log("update: " + value);
+    $('#' + value.id).css('left', value.xPos + 'px');
+    $('#' + value.id).css('top', value.yPos + 'px');
+}
+
+function updateCasterProjectileCSS(value, key, map) {
+    $('#' + value.id).css('left', value.xPos + 'px');
+    $('#' + value.id).css('top', value.yPos + 'px');
 }

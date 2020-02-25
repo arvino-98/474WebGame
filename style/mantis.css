@@ -66,6 +66,23 @@
     z-index: 4;
 }
 
+.casterEnemy {
+    position:absolute;
+    filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
+    height: 64px;
+    width: 64px;
+    z-index: 4;
+}
+
+.casterProjectile {
+    position:absolute;
+    background-image: url('../images/tornado_small.gif'); 
+    filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
+    height: 64px;
+    width: 64px;
+    z-index: 5;
+}
+
 .decoration {
     position:absolute;
     filter: drop-shadow(2px 3px 1px rgba(34, 34, 34, 0.45));

@@ -15,7 +15,8 @@ function GameState() {
             this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
         }
 
-        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, randomPosition(), 0, true);
+        // var a = randomPosition();
+        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, a, 0, true);
 
         requestAnimationFrame(gameLoop); // loop
     }
@@ -48,6 +49,24 @@ function GameState() {
         $('#' + id).remove(); // remove from html
         this.enemyMap.delete(id); // remove from map
     }
+
+    /*
+    spawnDoor()
+    */
+   this.spawnDoor = function(id, width, height, hboxWidth, hboxHeight, collidable){
+       var door = new Door(
+           id,
+           width, height,
+           hboxWidth, hboxHeight,
+           a[a.length - 1][0], a[a.length - 1][1],
+           collidable
+       );
+
+       $('#gameBoard').append("<div class = 'door' id='" + door.id + "'></div>");
+       if(collidable){
+           $("#" + door.id).css("z-index", 5);
+       }
+   }
 
     /*
     spawnRandomDecoration()

@@ -10,6 +10,7 @@ function updateCSSLoop() {
     updatePlayerCSS();
     gameState.enemyMap.forEach(updateBasicEnemyCSS);
     gameState.decorationMap.forEach(loadDecorations);
+    // gameState.doorSpawn();
 
     requestAnimationFrame(updateCSSLoop); // loop
 }

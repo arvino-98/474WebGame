@@ -69,8 +69,8 @@
 .casterEnemy {
     position:absolute;
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
-    height: 64px;
-    width: 64px;
+    height: 40px;
+    width: 34px;
     z-index: 4;
 }
 
@@ -80,7 +80,7 @@
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
     height: 21px;
     width: 21px;
-    z-index: 5;
+    z-index: 4;
 }
 
 .decoration {
@@ -164,4 +164,14 @@
     height: 35px;
     width: 48px;
     z-index: 1;
+}
+
+.dustCloud {
+    position: absolute;
+    background: url("../temp_images/dust_cloud.gif");
+    height: 85px;
+    width: 85px;
+    opacity: .45;
+    filter: drop-shadow(3px 8px 5px rgba(0, 0, 0, 0.308));
+    z-index: 5;
 }

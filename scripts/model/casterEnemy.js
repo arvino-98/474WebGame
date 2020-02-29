@@ -31,7 +31,7 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
     this.spawnProjectile = function() {
         var p = new CasterProjectile(
             "casterProjectile" + getRndInteger(0, 1000000),
-            30, 30,
+            10, 10,
             CASTER_P_ENEMY_HITBOX_WIDTH, CASTER_P_ENEMY_HITBOX_HEIGHT,
             this.xPos, this.yPos,
             this.calculateProjectileDx(), this.calculateProjectileDy()
@@ -87,7 +87,7 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
         }
 
         var b = getRndInteger(0, 100)
-        if (this.dx == 0 && this.dy == 0 && b <= 1) {this.spawnProjectile();};
+        if (this.dx == 0 && this.dy == 0 && b <= 5) {this.spawnProjectile();};
 
         // update caster's projectiles
         this.projectileMap.forEach(function (value, key, map) {

@@ -6,18 +6,33 @@ function GameState() {
     this.enemyMap = new Map();
     this.casterEnemyMap = new Map()
     this.decorationMap = new Map();
+    this.unlitPillars = -1;
 
     /*
     init()
     */
     this.init = function() {
+        // clear board
+        this.enemyMap.clear();
+        this.casterEnemyMap.clear();
+        this.decorationMap.clear();
+        $('.basicEnemy').remove();
+        $('.casterEnemy').remove();
+        $('.casterProjectile').remove();
+        $('.decoration').remove();
+
         // spawn small decorations
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
             this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
         }
-        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, randomPosition(), 0, true);
 
-        requestAnimationFrame(gameLoop); // loop
+        // spawn collidable decorations
+        var pillarPositions = randomPosition();
+        console.log(pillarPositions.length);
+        this.unlitPillars = pillarPositions.length;
+        console.log(this.unlitPillars);
+        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
+
     }
 
     /*
@@ -44,7 +59,7 @@ function GameState() {
     spawnCasterEnemy()
     Spawns an enemy entity in the same fashion as spawnBasicEnemy()
     */
-   this.spawnCasterEnemy = function(xPos, yPos) {
+    this.spawnCasterEnemy = function(xPos, yPos) {
     // create new enemy
     var e = new CasterEnemy(
         "casterEnemy" + (this.casterEnemyMap.size + 1),
@@ -56,15 +71,6 @@ function GameState() {
 
         this.casterEnemyMap.set(e.id, e); // add to map
         $('#gameBoard').append("<div class='casterEnemy' id='" + e.id + "'></div>"); // add to html
-    }
-
-    /*
-    removeByID()
-    Remove an enemy entity by ID
-    */
-    this.removeByID = function(id) {
-        $('#' + id).remove(); // remove from html
-        this.enemyMap.delete(id); // remove from map
     }
 
     /*
@@ -88,7 +94,7 @@ function GameState() {
         if (collidable) {
             $("#" + d.id).css("z-index", 5);
         }
-     }
+    }
 
      /*
     spawnDecoration()
@@ -110,7 +116,7 @@ function GameState() {
         if (collidable) {
             $("#" + d.id).css("z-index", 5);
         }
-     }
+    }
 
      /*
     spawnDecorationShaped()
@@ -135,7 +141,16 @@ function GameState() {
                 $("#" + d.id).css("z-index", 5);
             }
         }
-     }
+    }
+
+    /*
+    removeByID()
+    Remove an enemy entity by ID
+    */
+    this.removeByID = function(id) {
+        $('#' + id).remove(); // remove from html
+        this.enemyMap.delete(id); // remove from map
+    }
 
 }
 
@@ -145,6 +160,12 @@ Main game loop that continuously updates entitities
 and checks/handles collisions
 */
 function gameLoop() {
+    // player lights all pillars, reset board
+    if (gameState.unlitPillars == 0) {
+        setTimeout( function() {}, 100);
+        gameState.init();
+    }
+
     // update player
     gameState.player.update();
 
@@ -173,16 +194,13 @@ function gameLoop() {
         value.update();
     });
 
-    // handle and check for collisions between:
-    // player and all enemies
-    checkPlayerBasicEnemyCollision();
-    // player and decorations
-    checkPlayerDecorationCollision()
-    // player and caster enemies
-    checkPlayerCasterEnemyCollision();
-    // enemies and decorations
-    checkEnemyDecorationCollision()
+    // handle and check for collisions
+    checkPlayerBasicEnemyCollision(); // player and all enemies
+    checkPlayerDecorationCollision(); // player and decorations
+    checkPlayerCasterEnemyCollision(); // player and caster enemies
+    checkEnemyDecorationCollision(); // enemies and decorations
 
+    console.log("unlit pillars:" + gameState.unlitPillars);
     requestAnimationFrame(gameLoop); // loop
 }
 
@@ -249,6 +267,11 @@ function checkPlayerDecorationCollision() {
                     // disable player movement for a set time
                     gameState.player.stuck = true;
                     setTimeout(function() { gameState.player.stuck = false; }, 200);
+                    if (!value.collided) { 
+                        gameState.unlitPillars -= 1; 
+                        value.collided = true;
+                        value.name = 'tall_lantern_lit_collidable';
+                    }
             }
     });
 }
@@ -278,6 +301,15 @@ function checkPlayerCasterEnemyCollision() {
                     playerBloodSplashEffect();
                 }   
             }
+
+            gameState.decorationMap.forEach(
+                function(d_value, d_key, d_map) {
+                    if (isCollideDecoration(proj_value, d_value, d_value.xPos+5, d_value.yPos+100) && d_value.collidable) {
+                            console.log("decoration projectile collision");
+                            $('#' + proj_value.id).remove(); // remove from html
+                            proj_map.delete(proj_value.id); // remove from map
+                    }
+            });
         });
         // handle collision between player and caster enemy
         if (isCollide(gameState.player, value)) {
@@ -325,3 +357,4 @@ function checkEnemyDecorationCollision() {
         });
     }); 
 }
+

@@ -2,6 +2,7 @@ function gameStart(){
     $('#startScreen').css("visibility", "hidden");
     $('#gameBoard').css("visibility", "visible");
     gameState.init();
+    requestAnimationFrame(gameLoop); // loop
 }
 
 function gameEnd(){

@@ -92,14 +92,11 @@ function updateBasicEnemyCSS(value, key, map) {
         // choose image set based on direction
         if (value.dy < 0) {
             $("#" + key).css("background-image", "url('../images/spider_north.png')");
-        }
-        else if (value.dx > 0){
+        } else if (value.dx > 0){
             $("#" + key).css("background-image","url('../images/spider_east.png')");
-        }
-        else if (value.dx < 0){
+        } else if (value.dx < 0){
             $("#" + key).css("background-image","url('../images/spider_west.png')");
-        }
-        else if (value.dy >= 0){
+        } else if (value.dy >= 0){
             $("#" + key).css("background-image","url('../images/spider_south.png')");
         }
 
@@ -109,11 +106,21 @@ function updateBasicEnemyCSS(value, key, map) {
             if (value.step % 6 == 0) {
                 value.spritePos += 64;
             }
-        }
+            // dust cloud effect
+            if (value.step % 16 == 0) {
+                var randID = getRndInteger(0, 1000000);
+                $('#gameBoard').append("<div class='dustCloud' id='dustCloud" + randID + "'></div>"); // add to html
+                $('#dustCloud' + randID).css("left", (value.xPos-(value.dx*10)) + 'px');
+                $('#dustCloud' + randID).css("top", (value.yPos-(value.dy*5)) + 'px');
+                setTimeout( function() {$('#dustCloud' + randID).remove();}, 200);
+                //console.log('#dustCloud' + randID);
+            }
+        } 
         else {
             value.spritePos = 0;
         }
-    }
+    } 
+    
     else {
         $("#" + key).css("filter", "drop-shadow(5px 20px 0px rgba(34, 34, 34, 1))");
     }
@@ -138,23 +145,23 @@ function updateCasterEnemyCSS(value, key, map) {
     if (value.alive) {
         // choose image set based on direction
         if (value.dy < 0) {
-            $("#" + key).css("background-image", "url('../images/spider_north.png')");
+            $("#" + key).css("background-image", "url('../temp_images/mage_north.png')");
         }
         else if (value.dx > 0){
-            $("#" + key).css("background-image","url('../images/spider_east.png')");
+            $("#" + key).css("background-image","url('../temp_images/mage_east.png')");
         }
         else if (value.dx < 0){
-            $("#" + key).css("background-image","url('../images/spider_west.png')");
+            $("#" + key).css("background-image","url('../temp_images/mage_west.png')");
         }
         else if (value.dy >= 0){
-            $("#" + key).css("background-image","url('../images/spider_south.png')");
+            $("#" + key).css("background-image","url('../temp_images/mage_south.png')");
         }
 
         // code to animate sprites upon movement
         document.getElementById(key).style.backgroundPosition = `-${value.spritePos}px 0px`;
         if (value.moving) {
             if (value.step % 6 == 0) {
-                value.spritePos += 64;
+                value.spritePos += 34;
             }
         }
         else {

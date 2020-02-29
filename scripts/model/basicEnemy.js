@@ -82,7 +82,7 @@ function BasicEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, dy
 
     this.update = function() {
         // change direction after random amount of steps
-        if (this.step % (Math.floor(getRndInteger(10, 100) / 2)) == 0 && this.alive) {
+        if (this.step % (Math.floor(getRndInteger(10, 200) / 2)) == 0 && this.alive) {
             var a = getRndInteger(0, 100);
             // either tracked or random update
             // chance determined by BASIC_ENEMY_CHASE_FACTOR

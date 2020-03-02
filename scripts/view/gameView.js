@@ -8,9 +8,9 @@ const playerSpriteIncr = 36.8; // 37 41 36.8
 
 function updateCSSLoop() {
     updatePlayerCSS();
-    gameState.enemyMap.forEach(updateBasicEnemyCSS);
-    gameState.decorationMap.forEach(loadDecorations);
-    
+    gameState.enemyMap.forEach(updateBasicEnemyCSS); // update basic enemy
+    gameState.decorationMap.forEach(loadDecorations); // update decorations
+    // update caster enemy and projectiles
     gameState.casterEnemyMap.forEach(function(value, key, map) {
         updateCasterEnemyCSS(value, key, map);
         value.projectileMap.forEach(updateCasterProjectileCSS);
@@ -160,8 +160,8 @@ function updateCasterEnemyCSS(value, key, map) {
         // code to animate sprites upon movement
         document.getElementById(key).style.backgroundPosition = `-${value.spritePos}px 0px`;
         if (value.moving) {
-            if (value.step % 6 == 0) {
-                value.spritePos += 34;
+            if (value.step % 12 == 0) {
+                value.spritePos += 48.83; // width of caster sprite sheet / number of frames(6)
             }
         }
         else {

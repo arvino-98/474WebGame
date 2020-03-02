@@ -75,7 +75,7 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
     this.update = function() {
         var a = getRndInteger(0, 100);
         if (this.step % (Math.floor(getRndInteger(50, 100) / 2)) == 0 && this.alive) {
-            if (a <= 5) {
+            if (a <= 100) {
                 this.updateDelta();
             } else {
                 this.dx = 0;
@@ -86,8 +86,10 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
             this.dy *= GROUND_DRAG_FORCE;
         }
 
-        var b = getRndInteger(0, 100)
-        if (this.dx == 0 && this.dy == 0 && b <= 5) {this.spawnProjectile();};
+        // shoot after a certain amount of steps
+        if (this.step % 48 == 0) {
+            this.spawnProjectile();
+        }
 
         // update caster's projectiles
         this.projectileMap.forEach(function (value, key, map) {
@@ -101,13 +103,15 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
             }
 
             // fire trail effect
+            /*
             var randID = getRndInteger(0, 1000000);
             if (getRndInteger(0, 100) <= 100) {
-                //$('#gameBoard').append("<div class='fireTrail' id='fireTrail" + randID + "'></div>"); // add to html
-                //$('#fireTrail' + randID).css('left', value.xPos + 'px');
-                //$('#fireTrail' + randID).css('top', value.yPos + 'px');
-                //setTimeout(function () {$('#fireTrail' + randID).remove()}, 500);
+                $('#gameBoard').append("<div class='fireTrail' id='fireTrail" + randID + "'></div>"); // add to html
+                $('#fireTrail' + randID).css('left', value.xPos + 'px');
+                $('#fireTrail' + randID).css('top', value.yPos + 'px');
+                setTimeout(function () {$('#fireTrail' + randID).remove()}, 500);
             }
+            */
         });
 
         // get next x/y position

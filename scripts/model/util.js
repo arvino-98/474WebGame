@@ -39,10 +39,10 @@ const CASTER_ENEMY_PROJECTILE_VARIANCE = 3; // higher number leads to more sprea
 const CASTER_ENEMY_PROJECTILE_SPEED_DIVISOR = 65; // higher number leads to slower projectiles
 
 /* Constants for caster projectiles*/
-const CASTER_P_ENEMY_HITBOX_HEIGHT = 35;
-const CASTER_P_ENEMY_HITBOX_WIDTH = 35;
+const CASTER_P_ENEMY_HITBOX_HEIGHT = 10;
+const CASTER_P_ENEMY_HITBOX_WIDTH = 10;
 const CASTER_P_ENEMY_DAMAGE = 2;
-const CASTER_P_ENEMY_LIFESPAN = 200; // how long projectile lasts in game
+const CASTER_P_ENEMY_LIFESPAN = 150; // how long projectile lasts in game
 
 const PLAYER_HITBOX_HEIGHT = 30;
 const PLAYER_HITBOX_WIDTH = 30;
@@ -82,17 +82,28 @@ const DECORATION_COLLIDABLE_NAME_LIST = [
     "tall_lantern_unlit_collidable"
 ]
 
-var DIAMOND = [[640,175], [640,425], [440,300], [840 , 300]];
-var CIRCLE = [[640,175], [640,425], [440,300], [840 , 300], [500, 400], [500, 200], [770, 400], [770, 200]];
-var RECTANGLE_LONG = [[240, 175], [440,175], [640,175], [840,175], [1040, 175], [240, 350], [440,350], [640,350], [840,350], [1040, 350]];
-var RECTANGLE_SPACED = [[240, 175], [640,175], [1040, 175], [440,350], [840,350]];
+/* 
+Possible set positions for decorations.
+[ [xPos, yPos], ... ]
+*/
+const DIAMOND = [[640,175], [640,425], [440,300], [840 , 300]];
+const CIRCLE = [[640,175], [640,425], [440,300], [840 , 300], [500, 400], [500, 200], [770, 400], [770, 200]];
+const RECTANGLE_LONG = [[240, 175], [440,175], [640,175], [840,175], [1040, 175], [240, 350], [440,350], [640,350], [840,350], [1040, 350]];
+const RECTANGLE_SPACED = [[240, 175], [640,175], [1040, 175], [440,350], [840,350]];
+const CORNERS = [[200, 20], [1100, 20], [200, 520], [1100, 520]];
+const CORNERS_CIRCLE = [[200, 20], [1100, 20], [200, 520], [1100, 520], [640,175], [640,425], [440,300], [840 , 300], [500, 400], [500, 200], [770, 400], [770, 200]];
+/*
+randomPosition()
+returns a random position array
+*/
 function randomPosition() {
-    var a = getRndInteger(0, 3); // range [0, number of cases]
+    var a = getRndInteger(0, 4); // range [0, number of cases]
     switch(a) {
         case 0: return DIAMOND;
         case 1: return RECTANGLE_LONG;
         case 2: return RECTANGLE_SPACED;
         case 3: return CIRCLE;
+        case 4: return CORNERS;
     }
 }
 

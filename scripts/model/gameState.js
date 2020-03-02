@@ -6,32 +6,35 @@ function GameState() {
     this.enemyMap = new Map();
     this.casterEnemyMap = new Map()
     this.decorationMap = new Map();
-    this.unlitPillars = -1;
+    this.unlitPillars = -1; // init -1, will be set to number of pillars spawned
 
     /*
     init()
+    Clears board and spawns necessary entities.
     */
     this.init = function() {
-        // clear board
-        this.enemyMap.clear();
-        this.casterEnemyMap.clear();
-        this.decorationMap.clear();
-        $('.basicEnemy').remove();
-        $('.casterEnemy').remove();
-        $('.casterProjectile').remove();
-        $('.decoration').remove();
+        this.clearBoard();
 
         // spawn small decorations
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
             this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
         }
 
-        // spawn collidable decorations
+        // spawn pillars
         var pillarPositions = randomPosition();
-        console.log(pillarPositions.length);
+        //var pillarPositions = CORNERS_CIRCLE; // testing single pattern
         this.unlitPillars = pillarPositions.length;
-        console.log(this.unlitPillars);
         this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
+
+        // spawn enemies after certain amount of time
+        setTimeout(() => {
+            for (var i = 0; i < getRndInteger(1, 4); i++) {
+                this.spawnCasterEnemy(getRndInteger(200, 1080), getRndInteger(50, 100));
+            }
+            for (var i = 0; i < getRndInteger(2, 10); i++) {
+                this.spawnBasicEnemy(640, 50);
+            }
+        }, 2000);
 
     }
 
@@ -45,7 +48,7 @@ function GameState() {
         // create new enemy
         var e = new BasicEnemy(
             "basicEnemy" + (this.enemyMap.size + 1),
-            30, 30,
+            20, 20,
             BASIC_ENEMY_HITBOX_WIDTH, BASIC_ENEMY_HITBOX_HEIGHT,
             xPos, yPos,
             0, 0
@@ -109,13 +112,9 @@ function GameState() {
             getRndInteger(0, rotation_max),
             collidable
         );
-
         this.decorationMap.set(d.id, d);
-        //console.log(this.decorationMap);
         $('#gameBoard').append("<div class='decoration' id='" + d.id + "'></div>"); // add to html
-        if (collidable) {
-            $("#" + d.id).css("z-index", 5);
-        }
+        if (collidable) { $("#" + d.id).css("z-index", 5); }
     }
 
      /*
@@ -152,6 +151,20 @@ function GameState() {
         this.enemyMap.delete(id); // remove from map
     }
 
+    /*
+    clearBoard()
+    Remove all entities present in the internal game state and html
+    */
+    this.clearBoard = function() {
+        this.enemyMap.clear();
+        this.casterEnemyMap.clear();
+        this.decorationMap.clear();
+        $('.basicEnemy').remove();
+        $('.casterEnemy').remove();
+        $('.casterProjectile').remove();
+        $('.decoration').remove();
+    }
+
 }
 
 /*
@@ -162,7 +175,6 @@ and checks/handles collisions
 function gameLoop() {
     // player lights all pillars, reset board
     if (gameState.unlitPillars == 0) {
-        setTimeout( function() {}, 100);
         gameState.init();
     }
 
@@ -175,7 +187,10 @@ function gameLoop() {
         gameState.player.speed_increment = 0;
         gameState.player.dx = 0;
         gameState.player.dy = 0;
-        setTimeout(function() { gameEnd(); }, GAME_END_TIMEOUT);
+        setTimeout(function() { 
+            gameState.clearBoard();
+            gameEnd(); 
+        },GAME_END_TIMEOUT);
     }
 
     // update all enemies in enemyMap
@@ -200,9 +215,12 @@ function gameLoop() {
     checkPlayerCasterEnemyCollision(); // player and caster enemies
     checkEnemyDecorationCollision(); // enemies and decorations
 
-    console.log("unlit pillars:" + gameState.unlitPillars);
     requestAnimationFrame(gameLoop); // loop
 }
+
+/*
+Collision code below...
+*/
 
 /*
 playerBloodSplashEffect()
@@ -267,6 +285,7 @@ function checkPlayerDecorationCollision() {
                     // disable player movement for a set time
                     gameState.player.stuck = true;
                     setTimeout(function() { gameState.player.stuck = false; }, 200);
+                    // set pillar collided
                     if (!value.collided) { 
                         gameState.unlitPillars -= 1; 
                         value.collided = true;
@@ -302,12 +321,20 @@ function checkPlayerCasterEnemyCollision() {
                 }   
             }
 
+            // check collision between projectiles and decorations
             gameState.decorationMap.forEach(
                 function(d_value, d_key, d_map) {
                     if (isCollideDecoration(proj_value, d_value, d_value.xPos+5, d_value.yPos+100) && d_value.collidable) {
-                            console.log("decoration projectile collision");
-                            $('#' + proj_value.id).remove(); // remove from html
+                            /*
+                            var randId = getRndInteger(0, 10000000);
+                            $('#gameBoard').append("<div class='magicExplosion'id='magicExplosion" + randId + "'></div>");
+                            $('#magicExplosion' + randId).css('left', (proj_value.xPos+(proj_value.dx*2)) + "px");
+                            $('#magicExplosion' + randId).css('top', (proj_value.yPos+(proj_value.dy*2)) + "px");
+                            setTimeout( function() { $('#magicExplosion' + randId).remove(); }, 1000);
+                            */
+                            $('#' + proj_value.id).fadeOut("slow");
                             proj_map.delete(proj_value.id); // remove from map
+                            setTimeout( function() { $('#' + proj_value.id).remove(); }, 1000);
                     }
             });
         });
@@ -351,8 +378,8 @@ function checkEnemyDecorationCollision() {
     gameState.enemyMap.forEach(function(a_value, a_key) {
         gameState.decorationMap.forEach(function(b_value, b_key) {
             if (isCollideDecoration(a_value, b_value, b_value.xPos, b_value.yPos+100) && b_value.collidable) {
-                a_value.dx *= -1.15;
-                a_value.dy *= -1.15;
+                a_value.dx *= -1.09;
+                a_value.dy *= -1.09;
             }
         });
     }); 

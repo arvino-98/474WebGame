@@ -14,6 +14,7 @@ function GameState() {
     */
     this.init = function() {
         this.clearBoard();
+        randomBackground();
 
         // spawn small decorations
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
@@ -22,11 +23,11 @@ function GameState() {
 
         // spawn pillars
         var pillarPositions = randomPosition();
-        //var pillarPositions = CORNERS_CIRCLE; // testing single pattern
         this.unlitPillars = pillarPositions.length;
         this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
 
         // spawn enemies after certain amount of time
+        /*
         setTimeout(() => {
             for (var i = 0; i < getRndInteger(1, 4); i++) {
                 this.spawnCasterEnemy(getRndInteger(200, 1080), getRndInteger(50, 100));
@@ -35,7 +36,7 @@ function GameState() {
                 this.spawnBasicEnemy(640, 50);
             }
         }, 2000);
-
+        */
     }
 
     /*
@@ -245,6 +246,7 @@ function checkPlayerBasicEnemyCollision() {
             // if attacking
             if (gameState.player.attacking && gameState.player.health > 0) {
                 value.alive = false;
+                /*
                 // set hidden for a split second gives appearance of being sucked in and blown away
                 $('#' + key).css("visibility", "hidden");
                 setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
@@ -253,6 +255,9 @@ function checkPlayerBasicEnemyCollision() {
                 value.dy = BASIC_ENEMY_THROWN_SPEED;
                 // remove from game after n msec
                 setTimeout(function(){gameState.removeByID(key)}, BASIC_ENEMY_REMOVE_TIMEOUT);
+                */
+                $('#' + key).remove();
+                gameState.casterEnemyMap.delete(key); // remove from map
             }
 
             // if not attacking
@@ -342,15 +347,9 @@ function checkPlayerCasterEnemyCollision() {
         if (isCollide(gameState.player, value)) {
             // if attacking
             if (gameState.player.attacking && gameState.player.health > 0) {
-                value.alive = false;
-                // set hidden for a split second gives appearance of being sucked in and blown away
-                $('#' + key).css("visibility", "hidden");
-                setTimeout(function(){$('#' + key).css("visibility", "visible");}, 100);
-                // send enemy flying in random direction
-                value.dx = getRndInteger(-5, 5); 
-                value.dy = BASIC_ENEMY_THROWN_SPEED;
-                // remove from game after n msec
-                setTimeout(function(){gameState.removeByID(key)}, CASTER_ENEMY_REMOVE_TIMEOUT);
+                $('#' + key).remove();
+                gameState.casterEnemyMap.delete(key); // remove from map
+               
             }
             // if not attacking
             else if (!gameState.player.attacking && gameState.player.health > 0){

@@ -106,7 +106,8 @@ function updateBasicEnemyCSS(value, key, map) {
             if (value.step % 6 == 0) {
                 value.spritePos += 64;
             }
-            // dust cloud effect
+            // dust cloud effect - suck, make game slow, no good
+            /*
             if (value.step % 16 == 0) {
                 var randID = getRndInteger(0, 1000000);
                 $('#gameBoard').append("<div class='dustCloud' id='dustCloud" + randID + "'></div>"); // add to html
@@ -115,6 +116,7 @@ function updateBasicEnemyCSS(value, key, map) {
                 setTimeout( function() {$('#dustCloud' + randID).remove();}, 200);
                 //console.log('#dustCloud' + randID);
             }
+            */
         } 
         else {
             value.spritePos = 0;

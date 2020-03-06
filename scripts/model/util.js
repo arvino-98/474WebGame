@@ -36,11 +36,11 @@ const CASTER_ENEMY_NORMAL_SPEED = 25;
 const CASTER_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
 const CASTER_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
 const CASTER_ENEMY_PROJECTILE_VARIANCE = 3; // higher number leads to more spread for spawned projectiles
-const CASTER_ENEMY_PROJECTILE_SPEED_DIVISOR = 65; // higher number leads to slower projectiles
+const CASTER_ENEMY_PROJECTILE_SPEED_DIVISOR = 25; // higher number leads to slower projectiles
 
 /* Constants for caster projectiles*/
-const CASTER_P_ENEMY_HITBOX_HEIGHT = 10;
-const CASTER_P_ENEMY_HITBOX_WIDTH = 10;
+const CASTER_P_ENEMY_HITBOX_HEIGHT = 5;
+const CASTER_P_ENEMY_HITBOX_WIDTH = 5;
 const CASTER_P_ENEMY_DAMAGE = 2;
 const CASTER_P_ENEMY_LIFESPAN = 150; // how long projectile lasts in game
 
@@ -57,12 +57,15 @@ const PLAYER_STAMINA_RECHARGE_SPEED = .6;
 const PLAYER_INITIAL_X_POS = 650;
 const PLAYER_INITIAL_Y_POS = 380;
 
+
+
 /*
 Names of all files in ./images/decoration
 Any names file named here as a chance to appear as 
 a random decoration on the board
+
+small decorations: ~15px x 15px
 */
-// small decorations: ~15px x 15px
 const DECORATION_SMALL_NAME_LIST = [
     "bones1",
     "bones2",
@@ -77,11 +80,9 @@ const DECORATION_SMALL_NAME_LIST = [
     "root2",
     "sticks1"
 ];
-
 const DECORATION_COLLIDABLE_NAME_LIST = [
     "tall_lantern_unlit_collidable"
 ]
-
 /* 
 Possible set positions for decorations.
 [ [xPos, yPos], ... ]
@@ -106,6 +107,19 @@ function randomPosition() {
         case 4: return CORNERS;
     }
 }
+
+const BACKGROUNDS = [
+    "dirt_back",
+    "rock_back",
+    "forest_back",
+    "forest2_back"
+];
+function randomBackground() {
+    var a = BACKGROUNDS[getRndInteger(0, BACKGROUNDS.length)];
+    $("#gameBoard").css("background", "url('../images/backgrounds/" + a + ".png')")
+}
+
+
 
 /*
 General utility functions below...
@@ -152,5 +166,8 @@ function buttonSpawnCaster() {
 }
 function killPlayer() {
     gameState.player.health = 0;
+}
+function gameStateInit() {
+    gameState.init();
 }
 

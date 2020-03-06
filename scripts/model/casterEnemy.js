@@ -74,8 +74,8 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
 
     this.update = function() {
         var a = getRndInteger(0, 100);
-        if (this.step % (Math.floor(getRndInteger(50, 100) / 2)) == 0 && this.alive) {
-            if (a <= 100) {
+        if (this.step % (Math.floor(getRndInteger(10, 50) / 2)) == 0 && this.alive) {
+            if (a <= 20) {
                 this.updateDelta();
             } else {
                 this.dx = 0;
@@ -86,9 +86,10 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
             this.dy *= GROUND_DRAG_FORCE;
         }
 
-        // shoot after a certain amount of steps
-        if (this.step % 48 == 0) {
-            this.spawnProjectile();
+        // shoot randomly
+        var b = getRndInteger(0, 100);
+        if (b <= 1 && !this.moving) {
+            for (var i = 0; i < 7; i++) {this.spawnProjectile();}
         }
 
         // update caster's projectiles

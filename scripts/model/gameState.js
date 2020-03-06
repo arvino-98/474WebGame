@@ -294,7 +294,7 @@ function checkPlayerDecorationCollision() {
                     if (!value.collided) { 
                         gameState.unlitPillars -= 1; 
                         value.collided = true;
-                        value.name = 'tall_lantern_lit_collidable';
+                        value.name = 'tall_lantern_lit_collidable2';
                     }
             }
     });

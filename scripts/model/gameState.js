@@ -7,6 +7,10 @@ function GameState() {
     this.casterEnemyMap = new Map()
     this.decorationMap = new Map();
     this.unlitPillars = -1; // init -1, will be set to number of pillars spawned
+    this.door = new Door("door", 100, 100, 90, 90, 0, 0, false);
+
+    this.currentBackground = "";
+    this.nextBackground = getRandomBackground();
 
     /*
     init()
@@ -14,7 +18,23 @@ function GameState() {
     */
     this.init = function() {
         this.clearBoard();
-        randomBackground();
+
+        //setRandomBackground();
+        // set current and next backgrounds
+        this.currentBackground = this.nextBackground;
+        while (true) {
+            // make sure nextBackground is different from current
+            this.nextBackground = getRandomBackground();
+            if (this.nextBackground != this.currentBackground) {
+                break;
+            }
+        }
+        setBackground(this.currentBackground);
+
+        // set door closed and positions
+        this.door.open = false;
+        this.door.xPos = getRndInteger(100, 1180);
+        this.door.yPos = getRndInteger(100, 620);
 
         // spawn small decorations
         for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
@@ -174,9 +194,9 @@ Main game loop that continuously updates entitities
 and checks/handles collisions
 */
 function gameLoop() {
-    // player lights all pillars, reset board
+    // player lights all pillars, open door to next level
     if (gameState.unlitPillars == 0) {
-        gameState.init();
+        gameState.door.open = true;
     }
 
     // update player
@@ -191,7 +211,7 @@ function gameLoop() {
         setTimeout(function() { 
             gameState.clearBoard();
             gameEnd(); 
-        },GAME_END_TIMEOUT);
+        }, GAME_END_TIMEOUT);
     }
 
     // update all enemies in enemyMap
@@ -215,6 +235,7 @@ function gameLoop() {
     checkPlayerDecorationCollision(); // player and decorations
     checkPlayerCasterEnemyCollision(); // player and caster enemies
     checkEnemyDecorationCollision(); // enemies and decorations
+    checkPlayerDoorCollision(); // player and door
 
     requestAnimationFrame(gameLoop); // loop
 }
@@ -257,7 +278,7 @@ function checkPlayerBasicEnemyCollision() {
                 setTimeout(function(){gameState.removeByID(key)}, BASIC_ENEMY_REMOVE_TIMEOUT);
                 */
                 $('#' + key).remove();
-                gameState.casterEnemyMap.delete(key); // remove from map
+                gameState.enemyMap.delete(key); // remove from map
             }
 
             // if not attacking
@@ -384,3 +405,12 @@ function checkEnemyDecorationCollision() {
     }); 
 }
 
+/*
+checkPlayerDoorCollision() 
+*/
+function checkPlayerDoorCollision() {
+    if (isCollide(gameState.player, gameState.door) && gameState.door.open) {
+        gameState.init(); // move to next stage
+        //console.log("door collision")
+    }
+}

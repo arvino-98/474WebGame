@@ -25,6 +25,7 @@
                 <button id="killPlayerButton" onclick="killPlayer()">Suicide</button>
                 <button id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
                 <button id="initButton" onclick="gameStateInit()">Init</button>
+                <button id="spawnDoorButton" onclick="spawnDoor()">spawnDoor</button>
             </div>
 
             <div id="gameBoard">
@@ -39,6 +40,8 @@
 
                 <div id="player"></div>
                 <div id=bloodSplash></div>
+
+                <div id="door"></div>
                 <!-- Any game entities (enemies, obstacles, ...) generated in js should generally be appended here within gameBoard -->
         
             </div>
@@ -57,6 +60,7 @@
         <script type='text/javascript' src="./scripts/model/decoration.js"></script>
         <script type='text/javascript' src="./scripts/model/casterEnemy.js"></script>
         <script type='text/javascript' src="./scripts/model/casterProjectile.js"></script>
+        <script type='text/javascript' src="./scripts/model/door.js"></script>
         <!-- View -->
         <script type='text/javascript' src="./scripts/view/gameView.js"></script>
         <!-- Main -->

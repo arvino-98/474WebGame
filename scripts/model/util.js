@@ -98,26 +98,43 @@ randomPosition()
 returns a random position array
 */
 function randomPosition() {
-    var a = getRndInteger(0, 4); // range [0, number of cases]
+    var a = getRndInteger(0, 6); // range [0, number of cases+1]
     switch(a) {
         case 0: return DIAMOND;
         case 1: return RECTANGLE_LONG;
         case 2: return RECTANGLE_SPACED;
         case 3: return CIRCLE;
         case 4: return CORNERS;
+        case 5: return CORNERS_CIRCLE;
     }
 }
 
+/*
+Possible backgrounds
+*/
 const BACKGROUNDS = [
     "dirt_back",
     "rock_back",
     "forest_back",
-    "forest2_back"
+    "forest2_back",
+    "dungeon_back"
 ];
-function randomBackground() {
+/*
+setRandomBackground()
+sets a random background image
+*/
+function setRandomBackground() {
     var a = BACKGROUNDS[getRndInteger(0, BACKGROUNDS.length)];
     $("#gameBoard").css("background", "url('../images/backgrounds/" + a + ".png')")
 }
+
+function getRandomBackground() {
+    var a = BACKGROUNDS[getRndInteger(0, BACKGROUNDS.length)];
+    return a;
+}
+function setBackground(backgroundName) {
+    $("#gameBoard").css("background", "url('../images/backgrounds/" + backgroundName + ".png')")
+} 
 
 
 
@@ -169,5 +186,9 @@ function killPlayer() {
 }
 function gameStateInit() {
     gameState.init();
+}
+function spawnDoor() {
+    // spawn door by lighting all pillars
+    gameState.unlitPillars = 0;
 }
 

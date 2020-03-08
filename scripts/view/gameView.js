@@ -10,11 +10,14 @@ function updateCSSLoop() {
     updatePlayerCSS();
     gameState.enemyMap.forEach(updateBasicEnemyCSS); // update basic enemy
     gameState.decorationMap.forEach(loadDecorations); // update decorations
+
     // update caster enemy and projectiles
     gameState.casterEnemyMap.forEach(function(value, key, map) {
         updateCasterEnemyCSS(value, key, map);
         value.projectileMap.forEach(updateCasterProjectileCSS);
     });
+
+    updateDoorCSS();
 
     requestAnimationFrame(updateCSSLoop); // loop
 }
@@ -44,7 +47,7 @@ function updatePlayerCSS(){
         // code to animate sprites upon movement
         document.getElementById("player").style.backgroundPosition = `-${playerSpritePos}px 0px`;
         if (gameState.player.moving) {
-            if (gameState.player.step % 8 == 0) {
+            if (gameState.player.step % 6 == 0) {
                 playerSpritePos += playerSpriteIncr;
             }
         }
@@ -183,4 +186,20 @@ function updateCasterProjectileCSS(value, key, map) {
     $('#' + value.id).css('transform',"rotate(90deg)")
     $('#' + value.id).css('left', value.xPos + 'px');
     $('#' + value.id).css('top', value.yPos + 'px');
+}
+
+function updateDoorCSS() {
+    $('#door').css('background', "url('../images/backgrounds/" + gameState.nextBackground + ".png')");
+
+    // visible if open, else hidden
+    if (gameState.door.open) {
+        $('#door').css('visibility', 'visible');
+    } else {
+        $('#door').css('visibility', 'hidden');
+    }
+
+    $('#door').css('left', gameState.door.xPos + 'px');
+    $('#door').css('top', gameState.door.yPos + 'px');
+
+    $('#door').css('background-position', (-gameState.door.xPos) + 'px ' +  (-gameState.door.yPos+30) + 'px');
 }

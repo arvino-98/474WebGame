@@ -219,12 +219,8 @@
     width: 150px;
     z-index: 2;
     border-radius: 50%;
-    box-shadow:
-        0 0 6px 3px #fff,  /* inner */
-        0 0 10px 6px rgba(89, 31, 197, 0.90), /* middle */
-        0 0 14px 9px rgba(89, 31, 197, 0.50); /* outer */
-    -webkit-animation: fadeinout 4s linear infinite;
-    animation: fadeinout 4s linear infinite;
+    /*-webkit-animation: fadeinout 4s linear infinite;*/
+    /*animation: fadeinout 4s linear infinite;*/
 }
 @-webkit-keyframes fadeinout {
     0%,100% { opacity: 1; }

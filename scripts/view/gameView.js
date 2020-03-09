@@ -190,13 +190,19 @@ function updateCasterProjectileCSS(value, key, map) {
 
 function updateDoorCSS() {
     $('#door').css('background', "url('../images/backgrounds/" + gameState.nextBackground + ".png')");
+    $('#door').css('opacity', gameState.doorOpacity);
 
     // visible if open, else hidden
+    
     if (gameState.door.open) {
-        $('#door').css('visibility', 'visible');
+        //$('#door').css('visibility', 'visible');
+        $('#door').css('box-shadow', " 0 0 6px 3px #fff, 0 0 10px 6px rgba(89, 31, 197, 0.90), 0 0 14px 9px rgba(89, 31, 197, 0.50)");
     } else {
-        $('#door').css('visibility', 'hidden');
+        //$('#door').css('visibility', 'hidden');
+        $('#door').css('box-shadow', "");
     }
+    
+    
 
     $('#door').css('left', gameState.door.xPos + 'px');
     $('#door').css('top', gameState.door.yPos + 'px');

@@ -6,6 +6,7 @@ function GameState() {
     this.enemyMap = new Map();
     this.casterEnemyMap = new Map()
     this.decorationMap = new Map();
+    this.doorOpacity = -1 // init -1
     this.unlitPillars = -1; // init -1, will be set to number of pillars spawned
     this.door = new Door("door", 150, 150, 120, 120, 0, 0, false);
 
@@ -225,6 +226,7 @@ function GameState() {
 
 }
 
+
 /*
 gameLoop()
 Main game loop that continuously updates entitities
@@ -235,6 +237,8 @@ function gameLoop() {
     if (gameState.unlitPillars == 0) {
         gameState.door.open = true;
     }
+
+    gameState.doorOpacity = 1 / (gameState.unlitPillars + 1);
 
     // update player
     gameState.player.update();

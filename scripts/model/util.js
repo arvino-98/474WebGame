@@ -98,14 +98,11 @@ randomPosition()
 returns a random position array
 */
 function randomPosition() {
-    var a = getRndInteger(0, 6); // range [0, number of cases+1]
+    var a = getRndInteger(0, 3); // range [0, number of cases+1]
     switch(a) {
         case 0: return DIAMOND;
-        case 1: return RECTANGLE_LONG;
-        case 2: return RECTANGLE_SPACED;
-        case 3: return CIRCLE;
-        case 4: return CORNERS;
-        case 5: return CORNERS_CIRCLE;
+        case 1: return RECTANGLE_SPACED;
+        case 2: return CORNERS;
     }
 }
 
@@ -113,11 +110,11 @@ function randomPosition() {
 Possible backgrounds
 */
 const BACKGROUNDS = [
-    "dirt_back",
-    "rock_back",
     "forest_back",
-    "forest2_back",
-    "dungeon_back"
+    "dungeon_back",
+    "beach_back",
+    "ice_back2",
+    "lava_back"
 ];
 /*
 setRandomBackground()

@@ -7,7 +7,7 @@ function GameState() {
     this.casterEnemyMap = new Map()
     this.decorationMap = new Map();
     this.unlitPillars = -1; // init -1, will be set to number of pillars spawned
-    this.door = new Door("door", 100, 100, 90, 90, 0, 0, false);
+    this.door = new Door("door", 150, 150, 120, 120, 0, 0, false);
 
     this.currentBackground = "";
     this.nextBackground = getRandomBackground();
@@ -364,13 +364,19 @@ function checkPlayerCasterEnemyCollision() {
                     }
             });
         });
+
         // handle collision between player and caster enemy
         if (isCollide(gameState.player, value)) {
             // if attacking
             if (gameState.player.attacking && gameState.player.health > 0) {
+                // remove enemy's projectiles
+                value.projectileMap.forEach(function(proj_value, proj_key, proj_map) {
+                    $('#' + proj_key).remove();
+                });
+                value.projectileMap.clear();
+                // remove enemy
                 $('#' + key).remove();
                 gameState.casterEnemyMap.delete(key); // remove from map
-               
             }
             // if not attacking
             else if (!gameState.player.attacking && gameState.player.health > 0){

@@ -44,7 +44,8 @@ function GameState() {
         // spawn pillars
         var pillarPositions = randomPosition();
         this.unlitPillars = pillarPositions.length;
-        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
+        //this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
+        this.spawnPillars(100, 160, 8, 8, pillarPositions);
 
         // spawn enemies after certain amount of time
         /*
@@ -138,7 +139,7 @@ function GameState() {
         if (collidable) { $("#" + d.id).css("z-index", 5); }
     }
 
-     /*
+    /*
     spawnDecorationShaped()
     spicfy shape to spawn decoration by array defined as: [[xPos, Ypos] , [xPos, yPos], ...]
     */
@@ -160,6 +161,42 @@ function GameState() {
             if (collidable) {
                 $("#" + d.id).css("z-index", 5);
             }
+        }
+    }
+
+    /*
+    spawnPillars()
+    spawns 2 layers of pillars to give illusion of depth
+    */
+    this.spawnPillars = function(width, height, hboxWidth, hboxHeight, postitions) {
+        for (var i = 0; i < postitions.length; i++) {
+            var base = new Decoration(
+                "tall_lantern_base" + "_" + (this.decorationMap.size + 1),
+                "tall_lantern_base",
+                width, height,
+                hboxWidth, hboxHeight,
+                postitions[i][0], postitions[i][1],
+                0,
+                true
+            );
+            var neck = new Decoration(
+                "tall_lantern_neck" + "_" + (this.decorationMap.size + 1),
+                "tall_lantern_neck",
+                width, height,
+                hboxWidth, hboxHeight,
+                postitions[i][0], postitions[i][1],
+                0,
+                false
+            );
+
+            this.decorationMap.set(base.id, base);
+            this.decorationMap.set(neck.id, neck);
+
+            $('#gameBoard').append("<div class='decoration' id='" + base.id + "'></div>"); // add to html
+            $("#" + base.id).css("z-index", 2); // base indexed to background
+
+            $('#gameBoard').append("<div class='decoration' id='" + neck.id + "'></div>"); // add to html
+            $("#" + neck.id).css("z-index", 5); // neck indexed to foreground
         }
     }
 
@@ -305,7 +342,7 @@ checks and handles collisions between the player and all decorations in decorati
 function checkPlayerDecorationCollision() {
     gameState.decorationMap.forEach(
         function(value, key, map) {
-            if (isCollideDecoration(gameState.player, value, value.xPos+5, value.yPos+100) && value.collidable) {
+            if (isCollideDecoration(gameState.player, value, value.xPos+25, value.yPos+100) && value.collidable) {
                     gameState.player.dx *= -10;
                     gameState.player.dy *= -10;
                     // disable player movement for a set time
@@ -315,7 +352,21 @@ function checkPlayerDecorationCollision() {
                     if (!value.collided) { 
                         gameState.unlitPillars -= 1; 
                         value.collided = true;
-                        value.name = 'tall_lantern_lit_collidable2';
+                        //value.name = 'tall_lantern_lit_neck';
+
+                        // set fire effect to indicate on
+                        var fire = new Decoration(
+                            "tall_lantern_lit_neck" + "_" + (gameState.decorationMap.size + 1),
+                            "tall_lantern_lit_neck",
+                            value.width, value.height,
+                            0, 0,
+                            value.xPos, value.yPos,
+                            0,
+                            false
+                        );
+                        gameState.decorationMap.set(fire.id, fire);
+                        $('#gameBoard').append("<div class='decoration' id='" + fire.id + "'></div>"); // add to html
+                        $("#" + fire.id).css("z-index", 5);
                     }
             }
     });

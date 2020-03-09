@@ -228,9 +228,9 @@
 }
 @-webkit-keyframes fadeinout {
     0%,100% { opacity: 1; }
-    50% { opacity: .75; }
+    50% { opacity: .8; }
   }
 @keyframes fadeinout {
     0%,100% { opacity: 1; }
-    50% { opacity: .75; }
+    50% { opacity: .8; }
 }

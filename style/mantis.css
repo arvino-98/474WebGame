@@ -20,6 +20,10 @@
     visibility: hidden;
 }
 
+#gameToolBar {
+    visibility: hidden;
+}
+
 #gameBoard{
     background:url('../images/dirt_tile.png');
     width:1280px;
@@ -48,9 +52,10 @@
     z-index: 3;
 }
 
-#startGameButton {
+.bigButton {
     background-color: black; 
     margin-top: 20%;
+    border-radius: 50%;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -76,6 +81,33 @@
         transform:rotate(10deg);
     }
 }
+
+.toolbarButton {
+    visibility: hidden;
+    position: fixed;
+    z-index: 1000000;
+    width: 150px;
+    height:50px;
+    border-radius: 50%;
+    background-image: radial-gradient(blue, brown, black);
+    border: none;
+    filter: drop-shadow(0 0 0.15rem crimson);
+    color: white;
+}
+
+#spawnEnemyButton {
+    left: 7rem;
+    top: 6rem;
+}
+#killPlayerButton {
+    left: 2rem;
+    top: 9rem;
+}
+#mapSizeButton {
+    left: 12rem;
+    top: 9rem;
+}
+
 .basicEnemy {
     position:absolute;
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));

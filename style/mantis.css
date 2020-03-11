@@ -28,6 +28,7 @@
     visibility: hidden;
     zoom: 1.2;
     border-style: solid;
+    overflow: hidden;
 }
 
 .gameInfo{
@@ -79,7 +80,7 @@
     position:absolute;
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
     height: 64px;
-    width: 64px;
+    width: 56px;
     z-index: 4;
 }
 
@@ -229,4 +230,17 @@
 @keyframes fadeinout {
     0%,100% { opacity: 1; }
     50% { opacity: .8; }
+}
+
+#enemySpawnDoor {
+    background: url("../temp_images/web.gif");
+    position:absolute;
+    height: 150px;
+    width: 150px;
+    z-index: 2;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 6px 3px #fff, 
+        0 0 10px 6px rgba(89, 31, 197, 0.90), 
+        0 0 14px 9px rgba(89, 31, 197, 0.50);
 }

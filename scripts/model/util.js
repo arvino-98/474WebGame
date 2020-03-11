@@ -50,8 +50,8 @@ const PLAYER_WIDTH = $('#player').width();
 const PLAYER_HEIGHT = $('#player').height();
 const PLAYER_NORMAL_SPEED = 35;
 const PLAYER_SPRINT_SPEED = 55;
-const PLAYER_SPRINT_COST = 1.5; // stamina cost of sprint
-const PLAYER_TORNADO_COST = 3; // stamina cost of tornado attack
+const PLAYER_SPRINT_COST = 1.2; // stamina cost of sprint
+const PLAYER_TORNADO_COST = 1.5; // stamina cost of tornado attack
 const PLAYER_STAMINA_RECHARGE_DELAY = 1500; // in msec
 const PLAYER_STAMINA_RECHARGE_SPEED = .6;
 const PLAYER_INITIAL_X_POS = 650;
@@ -90,7 +90,7 @@ Possible set positions for decorations.
 const DIAMOND = [[640,175], [640,425], [440,300], [840 , 300]];
 const CIRCLE = [[640,175], [640,425], [440,300], [840 , 300], [500, 400], [500, 200], [770, 400], [770, 200]];
 const RECTANGLE_LONG = [[240, 175], [440,175], [640,175], [840,175], [1040, 175], [240, 350], [440,350], [640,350], [840,350], [1040, 350]];
-const RECTANGLE_SPACED = [[240, 175], [640,175], [1040, 175], [440,350], [840,350]];
+const RECTANGLE_SPACED = [[240, 150], [640,150], [1040, 175], [440,325], [840,325]];
 const CORNERS = [[200, 20], [1100, 20], [200, 520], [1100, 520]];
 const CORNERS_CIRCLE = [[200, 20], [1100, 20], [200, 520], [1100, 520], [640,175], [640,425], [440,300], [840 , 300], [500, 400], [500, 200], [770, 400], [770, 200]];
 /*
@@ -105,6 +105,7 @@ function randomPosition() {
         case 2: return CORNERS;
     }
 }
+
 
 /*
 Possible backgrounds
@@ -124,7 +125,6 @@ function setRandomBackground() {
     var a = BACKGROUNDS[getRndInteger(0, BACKGROUNDS.length)];
     $("#gameBoard").css("background", "url('../images/backgrounds/" + a + ".png')")
 }
-
 function getRandomBackground() {
     var a = BACKGROUNDS[getRndInteger(0, BACKGROUNDS.length)];
     return a;
@@ -134,6 +134,14 @@ function setBackground(backgroundName) {
 } 
 
 
+/*
+Possible enemy spawn locations
+*/
+const ENEMY_SPAWN_LOCATIONS = [
+    [590, 0],
+    [0, 300],
+    [1150, 300]
+]
 
 /*
 General utility functions below...

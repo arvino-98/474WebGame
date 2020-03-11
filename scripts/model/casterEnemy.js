@@ -89,7 +89,7 @@ function CasterEnemy(id, width, height, hboxWidth, hboxHeight, xPos, yPos, dx, d
         // shoot randomly
         var b = getRndInteger(0, 100);
         if (b <= 1 && !this.moving) {
-            for (var i = 0; i < 7; i++) {this.spawnProjectile();}
+            for (var i = 0; i < 1; i++) {this.spawnProjectile();}
         }
 
         // update caster's projectiles

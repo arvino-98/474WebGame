@@ -13,6 +13,10 @@ function GameState() {
     this.currentBackground = "";
     this.nextBackground = getRandomBackground();
 
+    this.enemySpawnLoc = [590, 0]; // [xPos, yPos]
+    this.enemySpawnDoorOpacity = 1;
+    this.waveStep = 0;
+
     /*
     init()
     Clears board and spawns necessary entities.
@@ -45,24 +49,29 @@ function GameState() {
         // spawn pillars
         var pillarPositions = randomPosition();
         this.unlitPillars = pillarPositions.length;
-        //this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
-        this.spawnPillars(100, 160, 8, 8, pillarPositions);
+        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
 
-        // spawn enemies after certain amount of time
-        /*
-        setTimeout(() => {
-            for (var i = 0; i < getRndInteger(1, 4); i++) {
-                this.spawnCasterEnemy(getRndInteger(200, 1080), getRndInteger(50, 100));
-            }
-            for (var i = 0; i < getRndInteger(2, 10); i++) {
-                this.spawnBasicEnemy(640, 50);
-            }
-        }, 2000);
-        */
+        this.enemySpawnLoc = ENEMY_SPAWN_LOCATIONS[getRndInteger(0, ENEMY_SPAWN_LOCATIONS.length)];
+    }
+
+    /*
+    spawnEnemyWave()
+    Spawns a wave of enemies
+    numBasic = number of basic enemies you want to spawn
+    numCaster = likewise for caster enemies
+    */
+    this.spawnEnemyWave = function(numBasic, numCaster) {
+        for (var i = 0; i < numBasic; i++) {
+            this.spawnBasicEnemy(this.enemySpawnLoc[0], this.enemySpawnLoc[1]);
+        }
+        for (var i = 0; i < numCaster; i++) {
+            this.spawnCasterEnemy(this.enemySpawnLoc[0], this.enemySpawnLoc[1]);
+        }
     }
 
     /*
     spawnBasicEnemy()
+    Random ID by generating a really big integer
     Spawns an enemy entity by:
         - adding an ['id':enemy] keypair to enemyMap 
         - appending an enemy div to the #gameBoard div in the html
@@ -70,7 +79,7 @@ function GameState() {
     this.spawnBasicEnemy = function(xPos, yPos) {
         // create new enemy
         var e = new BasicEnemy(
-            "basicEnemy" + (this.enemyMap.size + 1),
+            "basicEnemy" + getRndInteger(0, 1000000000),
             20, 20,
             BASIC_ENEMY_HITBOX_WIDTH, BASIC_ENEMY_HITBOX_HEIGHT,
             xPos, yPos,
@@ -83,12 +92,13 @@ function GameState() {
 
     /*
     spawnCasterEnemy()
+    Random ID by generating a really big integer
     Spawns an enemy entity in the same fashion as spawnBasicEnemy()
     */
     this.spawnCasterEnemy = function(xPos, yPos) {
     // create new enemy
     var e = new CasterEnemy(
-        "casterEnemy" + (this.casterEnemyMap.size + 1),
+        "casterEnemy" + getRndInteger(0, 1000000000),
         30, 30,
         CASTER_ENEMY_HITBOX_WIDTH, CASTER_ENEMY_HITBOX_HEIGHT,
         xPos, yPos,
@@ -234,11 +244,34 @@ and checks/handles collisions
 */
 function gameLoop() {
     // player lights all pillars, open door to next level
-    if (gameState.unlitPillars == 0) {
+    if (gameState.unlitPillars == 0 && gameState.enemyMap.size <= 0 && gameState.casterEnemyMap.size <= 0) {
         gameState.door.open = true;
     }
 
+    // spawn wave of enemies if there are still unlit pillars
+    /*
+    if (gameState.unlitPillars != 0 && (gameState.enemyMap.size+gameState.casterEnemyMap.size) <= 1 ) {
+        var a = getRndInteger(0, 100);
+        if (a <= 5){ gameState.spawnEnemyWave(getRndInteger(3, 5), getRndInteger(0, 2)); }
+    }
+    */
+
+    if (gameState.unlitPillars != 0 && (gameState.enemyMap.size+gameState.casterEnemyMap.size) <= 20 && gameState.waveStep % 100 == 0) {
+        //gameState.spawnEnemyWave(getRndInteger(3, 6), getRndInteger(0, 2));
+        var a = getRndInteger(0, 100);
+        gameState.spawnBasicEnemy(gameState.enemySpawnLoc[0], gameState.enemySpawnLoc[1]);
+        gameState.spawnBasicEnemy(gameState.enemySpawnLoc[0], gameState.enemySpawnLoc[1]);
+
+        if (a <= 5) {
+            gameState.spawnCasterEnemy(gameState.enemySpawnLoc[0], gameState.enemySpawnLoc[1]);
+        }
+    }
+    gameState.waveStep += 1;
+
+    // adjust door opacity according to unlit pillars
     gameState.doorOpacity = 1 / (gameState.unlitPillars + 1);
+    gameState.enemySpawnDoorOpacity = 1 - gameState.doorOpacity;
+
 
     // update player
     gameState.player.update();

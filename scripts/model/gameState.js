@@ -132,26 +132,22 @@ function GameState() {
       /*
     spawnItem()
     */
-    this.spawnItem = function(itemName, width, height, hboxWidth, hboxHeight, xPos, yPos, collidable) {
+    this.spawnItem = function(itemName, width, height, hboxWidth, hboxHeight, xPos, yPos) {
         var i = new Item(
             itemName + "_" + (this.itemMap.size + 1),
             itemName,
             width, height,
             hboxWidth, hboxHeight,
             xPos, yPos,
-            collidable
         );
 
         this.itemMap.set(i.id, i);
         //console.log(this.itemMap);
         $('#gameBoard').append("<div class='item' id='" + i.id + "'></div>"); // add to html
-        if (collidable) {
-            $("#" + i.id).css("z-index", 5);
-        }
      }
-
 }
 
+// DECORATION_COLLIDABLE_NAME_LIST
 
 /*
 Main game loop that continuously updates entitities

@@ -128,3 +128,7 @@ function loadDecorations(value, key, map) {
     $('#' + value.id).css('transform', "rotate(" + value.rotation + "deg)");
     //console.log("load " + value.map_id)
 }
+
+function loadPowerUps(value, key, map) {
+    $("#" + value.id).css("powerUp", "url('.../images/potion.png)");
+}

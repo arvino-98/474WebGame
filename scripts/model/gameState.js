@@ -4,6 +4,7 @@ Model of the internal game state.
 function GameState() {
     this.player = new Player();
     this.enemyMap = new Map();
+    this.powerUpMap = new Map();
     this.decorationMap = new Map();
 
     /*
@@ -38,6 +39,21 @@ function GameState() {
     
         this.enemyMap.set(e.id, e); // add to map
         $('#gameBoard').append("<div class='basicEnemy' id='" + e.id + "'></div>"); // add to html
+    }
+
+    this.spawnPowerUp = function(xPos, yPos) {
+        var p = new powerUp(
+            "powerUp" + (this.powerUpMap.size + 1),
+            30, 30,
+            POWER_UP_HITBOX_WIDTH, POWER_UP_HITBOX_HEIGHT,
+            xPos, yPos,
+            0, 0
+        );
+
+        this.powerUpMap.set(p.id, p);
+        $('#gameBoard').append("<div class='powerUp' id='" + p.id + "'></div>");
+        console.log("spawnPowerUp function ran");
+        console.log(this.powerUpMap.size);
     }
 
     /*
@@ -145,6 +161,13 @@ function gameLoop() {
         value.playerYPos = gameState.player.yPos;
         value.update();
     }); 
+
+    gameState.powerUpMap.forEach(
+        function(value, key, map){
+            if(isCollide(gameState.player, value)){
+                console.log("collision detected: " + key)
+            }
+    });
 
     // check for collisions between player and all enemies.
     gameState.enemyMap.forEach(

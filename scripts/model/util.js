@@ -21,6 +21,9 @@ const BASIC_ENEMY_NORMAL_SPEED = 25;
 const BASIC_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
 const BASIC_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
 
+const POWER_UP_HITBOX_HEIGHT = 35;
+const POWER_UP_HITBOX_WIDTH = 35;
+
 const PLAYER_HITBOX_HEIGHT = 30;
 const PLAYER_HITBOX_WIDTH = 30;
 const PLAYER_WIDTH = $('#player').width();
@@ -112,8 +115,14 @@ function isCollideDecoration(player, collidable_decoration, decor_xPos, decor_yP
 // for testing...
 function buttonSpawn() {
     gameState.spawnBasicEnemy(640, 50);
+
 }
 function killPlayer() {
     gameState.player.health = 0;
+    
+}
+function buttonSpawnPowerUp(){
+    gameState.spawnPowerUp(640, 50);
+    console.log("pressed");
 }
 

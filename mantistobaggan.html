@@ -23,6 +23,7 @@
                 <button class="toolbarButton" id="spawnEnemyButton" onclick="buttonSpawn()">Spawn Enemy</button>
                 <button class="toolbarButton" id="killPlayerButton" onclick="killPlayer()">Suicide</button>
                 <button class="toolbarButton" id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
+                <button class="toolbarButton" id='spawnPowerUpBotton' onclick="buttonSpawnPowerUp()">Spawn PowerUp</button>
             </div>
 
             <div id="gameBoard">
@@ -37,6 +38,7 @@
 
                 <div id="player"></div>
                 <div id=bloodSplash></div>
+                <div class='powerUp' id='potion'></div>
                 <!-- Any game entities (enemies, obstacles, ...) generated in js should generally be appended here within gameBoard -->
         
             </div>
@@ -53,6 +55,7 @@
         <script type='text/javascript' src="./scripts/model/basicEnemy.js"></script>
         <script type='text/javascript' src="./scripts/model/util.js"></script>
         <script type='text/javascript' src="./scripts/model/decoration.js"></script>
+        <script type='text/javascript' src="./scripts/model/powerUp.js"></script>
         <!-- View -->
         <script type='text/javascript' src="./scripts/view/gameView.js"></script>
         <!-- Main -->

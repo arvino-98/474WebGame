@@ -122,6 +122,12 @@
     z-index: 1;
 }
 
+.item {
+    position: absolute;
+    height: 30px;
+    width: 30px;
+}
+
 #meter1 { 
     top: 5px;
     height: 10px; 

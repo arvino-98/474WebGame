@@ -5,6 +5,7 @@ function GameState() {
     this.player = new Player();
     this.enemyMap = new Map();
     this.decorationMap = new Map();
+    this.itemMap = new Map();
 
     /*
     init()
@@ -48,6 +49,15 @@ function GameState() {
         $('#' + id).remove(); // remove from html
         this.enemyMap.delete(id); // remove from map
     }
+
+    /*
+    removeByID()
+    Remove an enemy entity by ID
+    */
+   this.removeItemByID = function(id) {
+    $('#' + id).remove(); // remove from html
+    this.itemMap.delete(id); // remove from map
+}
 
     /*
     spawnRandomDecoration()
@@ -116,6 +126,27 @@ function GameState() {
             if (collidable) {
                 $("#" + d.id).css("z-index", 5);
             }
+        }
+     }
+
+      /*
+    spawnItem()
+    */
+    this.spawnItem = function(itemName, width, height, hboxWidth, hboxHeight, xPos, yPos, collidable) {
+        var i = new Item(
+            itemName + "_" + (this.itemMap.size + 1),
+            itemName,
+            width, height,
+            hboxWidth, hboxHeight,
+            xPos, yPos,
+            collidable
+        );
+
+        this.itemMap.set(i.id, i);
+        //console.log(this.itemMap);
+        $('#gameBoard').append("<div class='item' id='" + i.id + "'></div>"); // add to html
+        if (collidable) {
+            $("#" + i.id).css("z-index", 5);
         }
      }
 
@@ -202,6 +233,20 @@ function gameLoop() {
                     // disable player movement for a set time
                     gameState.player.stuck = true;
                     setTimeout(function() { gameState.player.stuck = false; }, 200);
+            }
+    });
+
+    // handle collision between player and items
+    gameState.itemMap.forEach(
+        function(value, key, map) {
+            if (isCollide(gameState.player, value) && value.name.equals("healthpotion")) {
+                    gameState.player.health += ITEM_HEALTH;
+                    gameState.removeItemByID(key);
+            }
+            if(isCollide(gameState.player, value) && value.name.equals("speedpotion")){
+                gameState.player.speed_increment += ITEM_STAMINA;
+                gameState.removeItemByID(key);
+                setTimeout(function(){gameState.player.speed_increment += PLAYER_NORMAL_SPEED;}, 30000);
             }
     });
 

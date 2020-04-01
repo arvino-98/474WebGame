@@ -21,6 +21,9 @@ const BASIC_ENEMY_NORMAL_SPEED = 25;
 const BASIC_ENEMY_CHASE_FACTOR = 65; // [0, 100] - the higher, the more aggressively enemy will chase player
 const BASIC_ENEMY_REMOVE_TIMEOUT = 3000 // in msec
 
+const ITEM_STAMINA = 65;
+const ITEM_HEALTH = 5;
+
 const PLAYER_HITBOX_HEIGHT = 30;
 const PLAYER_HITBOX_WIDTH = 30;
 const PLAYER_WIDTH = $('#player').width();
@@ -57,6 +60,12 @@ const DECORATION_SMALL_NAME_LIST = [
 
 const DECORATION_COLLIDABLE_NAME_LIST = [
     "tall_lantern_unlit_collidable"
+]
+
+const ITEM_LIST = [
+    "healthpotion",
+    "speedpotion"
+
 ]
 
 var DIAMOND = [[640,175], [640,425], [440,300], [840 , 300]];
@@ -112,6 +121,11 @@ function isCollideDecoration(player, collidable_decoration, decor_xPos, decor_yP
 // for testing...
 function buttonSpawn() {
     gameState.spawnBasicEnemy(640, 50);
+}
+
+function buttonSpawn2() {
+    alert('Working');
+    // gameState.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
 }
 function killPlayer() {
     gameState.player.health = 0;

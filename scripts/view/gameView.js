@@ -10,6 +10,7 @@ function updateCSSLoop() {
     updatePlayerCSS();
     gameState.enemyMap.forEach(updateBasicEnemyCSS);
     gameState.decorationMap.forEach(loadDecorations);
+    gameState.itemMap.forEach(loadDecorations);
 
     requestAnimationFrame(updateCSSLoop); // loop
 }
@@ -127,4 +128,8 @@ function loadDecorations(value, key, map) {
     $('#' + value.id).css('top', value.yPos + 'px');
     $('#' + value.id).css('transform', "rotate(" + value.rotation + "deg)");
     //console.log("load " + value.map_id)
+}
+
+function loadItems(value, key, map) {
+    $("#" + value.id).css("background-image", "url('../images/" + value.name + ".gif')");
 }

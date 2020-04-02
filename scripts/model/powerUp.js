@@ -25,5 +25,9 @@ function powerUp(id, width, height, hboxWidth, hboxHeight, xPos, yPos) {
         }
     }
 
+    this.randomInt = function(){
+        Math.floor(Math.random() * 301) + 500;
+    }
+
 
 }

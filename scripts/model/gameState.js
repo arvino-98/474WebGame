@@ -41,19 +41,22 @@ function GameState() {
         $('#gameBoard').append("<div class='basicEnemy' id='" + e.id + "'></div>"); // add to html
     }
 
-    this.spawnPowerUp = function(xPos, yPos) {
+    this.spawnPowerUp = function() {
         var p = new powerUp(
             "powerUp" + (this.powerUpMap.size + 1),
             30, 30,
             POWER_UP_HITBOX_WIDTH, POWER_UP_HITBOX_HEIGHT,
-            xPos, yPos,
+            //xPos, yPos,
+            //getRndInteger($('#gameBoard').width()+100, $('#gameBoard').width()-100,
+            //getRndInteger($('#gameBoard').height()+100, $('#gameBoard').height()-100),
+            getRndInteger(100, 900), getRndInteger(100, 700),
             0, 0
         );
 
         this.powerUpMap.set(p.id, p);
         $('#gameBoard').append("<div class='powerUp' id='" + p.id + "'></div>");
-        console.log("spawnPowerUp function ran");
-        console.log(this.powerUpMap.size);
+        //console.log("spawnPowerUp function ran");
+        //console.log(this.powerUpMap.size);
     }
 
     /*
@@ -61,8 +64,15 @@ function GameState() {
     Remove an enemy entity by ID
     */
     this.removeByID = function(id) {
+        if(id == "basicEnemy"){
+            $('#' + id).remove(); // remove from html
+            this.enemyMap.delete(id); // remove from map
+        } else {
         $('#' + id).remove(); // remove from html
-        this.enemyMap.delete(id); // remove from map
+        this.powerUpMap.delete(id); // remove from map
+        }
+        
+        
     }
 
     /*
@@ -165,7 +175,15 @@ function gameLoop() {
     gameState.powerUpMap.forEach(
         function(value, key, map){
             if(isCollide(gameState.player, value)){
+                gameState.removeByID(key);
+                if(gameState.player.health > 79){
+                    gameState.player.health += (100 - gameState.player.health)
+                } else {
+                    gameState.player.health += 20;
+                }
+                
                 console.log("collision detected: " + key)
+                console.log(gameState.player.health)
             }
     });
 

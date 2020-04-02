@@ -8,27 +8,4 @@ function powerUp(id, potion, width, height, hboxWidth, hboxHeight, xPos, yPos) {
     this.hitboxHeight = hboxHeight;
     this.xPos = xPos;
     this.yPos = yPos;
-
-
-    this.randomPowerUp = function() {
-        var r = getRndInteger(0,2);
-
-        switch(r){
-            case 0:
-                //power up 1
-                break;
-            case 1:
-                //power up 2
-                break;
-            case 2:
-                //power up 3
-                break;
-        }
-    }
-
-
-
- 
-
-
 }

@@ -1,6 +1,7 @@
-function powerUp(id, width, height, hboxWidth, hboxHeight, xPos, yPos) {
+function powerUp(id, potion, width, height, hboxWidth, hboxHeight, xPos, yPos) {
     this.id = id;
 
+    this.potion = potion;
     this.width = width;
     this.height = height;
     this.hitboxWidth = hboxWidth;
@@ -25,9 +26,9 @@ function powerUp(id, width, height, hboxWidth, hboxHeight, xPos, yPos) {
         }
     }
 
-    this.randomInt = function(){
-        Math.floor(Math.random() * 301) + 500;
-    }
+
+
+ 
 
 
 }

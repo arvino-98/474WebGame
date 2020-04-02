@@ -44,19 +44,16 @@ function GameState() {
     this.spawnPowerUp = function() {
         var p = new powerUp(
             "powerUp" + (this.powerUpMap.size + 1),
+            "powerUp" + getRndInteger(1,4),
             30, 30,
             POWER_UP_HITBOX_WIDTH, POWER_UP_HITBOX_HEIGHT,
-            //xPos, yPos,
-            //getRndInteger($('#gameBoard').width()+100, $('#gameBoard').width()-100,
-            //getRndInteger($('#gameBoard').height()+100, $('#gameBoard').height()-100),
             getRndInteger(100, 900), getRndInteger(100, 700),
             0, 0
         );
 
         this.powerUpMap.set(p.id, p);
         $('#gameBoard').append("<div class='powerUp' id='" + p.id + "'></div>");
-        //console.log("spawnPowerUp function ran");
-        //console.log(this.powerUpMap.size);
+        console.log("powerUp ID = " + p.potion)
     }
 
     /*
@@ -175,15 +172,22 @@ function gameLoop() {
     gameState.powerUpMap.forEach(
         function(value, key, map){
             if(isCollide(gameState.player, value)){
-                gameState.removeByID(key);
-                if(gameState.player.health > 79){
-                    gameState.player.health += (100 - gameState.player.health)
-                } else {
-                    gameState.player.health += 20;
+               if(value.potion == "powerUp1"){ 
+                  if(gameState.player.health > 79){
+                        gameState.player.health += (100 - gameState.player.health)
+                    } else {
+                        gameState.player.health += 20;
+                    }
+                    console.log(gameState.player.health)
                 }
+                if(value.potion == "powerUp2"){
+                    gameState.player.powerUp2 = true;
+                }
+                gameState.removeByID(key);
                 
-                console.log("collision detected: " + key)
-                console.log(gameState.player.health)
+                //console.log("value " + value)
+                //console.log("key: " + key)
+                console.log(value.potion)
             }
     });
 

@@ -16,6 +16,8 @@ function Player() {
     this.staminaRechargeRate = 1;
     this.health = 100;
     this.stuck = false;
+    this.powerUp2 = false;
+    this.powerUp3 = false;
 
     /*
     Update player velocity based on key presses
@@ -49,6 +51,7 @@ function Player() {
         this.dy = dy;
     }
 
+
     /*
     Update a player's pos and vel.
     */
@@ -65,14 +68,20 @@ function Player() {
             }
 
             // handle sprinting action
-            if (input.keyHandler.shift && this.moving && this.stamina > 0) {
+            if (input.keyHandler.shift && this.moving && this.stamina > 0 && !this.powerUp2) {
                 this.sprinting = true;
                 this.stamina -= PLAYER_SPRINT_COST;
                 this.speed_increment = PLAYER_SPRINT_SPEED;
             } else {
                 this.sprinting = false;
                 this.speed_increment = PLAYER_NORMAL_SPEED;
+            } 
+            
+            if(this.powerUp2 == true){
+                this.sprinting = true;
+                this.speed_increment = PLAYER_SPRINT_SPEED;
             }
+
         }
 
         // update dx and dy

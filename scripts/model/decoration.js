@@ -9,4 +9,5 @@ function Decoration(id, name, width, height, hboxWidth, hboxHeight, xPos, yPos, 
     this.yPos = yPos;
     this.rotation = rotation;
     this.collidable = collidable; // true if collision logic, else false
+    this.collided = false; // initially false, should set true after first collision
 }

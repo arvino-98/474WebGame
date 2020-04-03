@@ -20,10 +20,19 @@
             </div>
 
             <div id = "gameToolbar">
+<<<<<<< HEAD
                 <button class="toolbarButton" id="spawnEnemyButton" onclick="buttonSpawn()">Spawn Enemy</button>
                 <button class="toolbarButton" id="killPlayerButton" onclick="killPlayer()">Suicide</button>
                 <button class="toolbarButton" id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
                 <button class="toolbarButton" id='spawnPowerUpBotton' onclick="buttonSpawnPowerUp()">Spawn PowerUp</button>
+=======
+                <button id="spawnEnemyButton" onclick="buttonSpawnBasic()">Spawn Enemy</button>
+                <button id="spawnCasterButton" onclick="buttonSpawnCaster()">Spawn Caster Enemy</button>
+                <button id="killPlayerButton" onclick="killPlayer()">Suicide</button>
+                <button id="mapSizeButton" onclick="logEnemyMapSize()">Log enemyMap Size</button>
+                <button id="initButton" onclick="gameStateInit()">Init</button>
+                <button id="spawnDoorButton" onclick="spawnDoor()">spawnDoor</button>
+>>>>>>> newEnemies
             </div>
 
             <div id="gameBoard">
@@ -38,6 +47,9 @@
 
                 <div id="player"></div>
                 <div id=bloodSplash></div>
+
+                <div id="door"></div>
+                <div id="enemySpawnDoor"></div>
                 <!-- Any game entities (enemies, obstacles, ...) generated in js should generally be appended here within gameBoard -->
         
             </div>
@@ -54,7 +66,13 @@
         <script type='text/javascript' src="./scripts/model/basicEnemy.js"></script>
         <script type='text/javascript' src="./scripts/model/util.js"></script>
         <script type='text/javascript' src="./scripts/model/decoration.js"></script>
+<<<<<<< HEAD
         <script type='text/javascript' src="./scripts/model/powerUp.js"></script>
+=======
+        <script type='text/javascript' src="./scripts/model/casterEnemy.js"></script>
+        <script type='text/javascript' src="./scripts/model/casterProjectile.js"></script>
+        <script type='text/javascript' src="./scripts/model/door.js"></script>
+>>>>>>> newEnemies
         <!-- View -->
         <script type='text/javascript' src="./scripts/view/gameView.js"></script>
         <!-- Main -->

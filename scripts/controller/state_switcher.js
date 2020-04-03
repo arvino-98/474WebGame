@@ -3,6 +3,7 @@ function gameStart(){
     $('#gameBoard').css("visibility", "visible");
     $('.toolbarButton').css("visibility", "visible");
     gameState.init();
+    requestAnimationFrame(gameLoop); // loop
 }
 
 function gameEnd(){

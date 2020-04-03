@@ -44,11 +44,9 @@ function Player() {
     /*
     Initialize player position and velocities
     */
-    this.init = function(xPos, yPos, dx, dy) {
+    this.init = function(xPos, yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
-        this.dx = dx;
-        this.dy = dy;
     }
 
 

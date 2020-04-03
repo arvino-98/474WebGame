@@ -1,5 +1,5 @@
 #startScreen{
-    background:url('../images/cheetahbackground.jpg');
+    background:url('../images/fantasyknight.jpg');
     background-size: 980px 560px;
     background-position-x: 0px;
     background-repeat: no-repeat;
@@ -10,7 +10,19 @@
 }
 
 #deathScreen{
-    background:url('../images/cheetahbackground.jpg');
+    background:url('../images/fantasyknight.jpg');
+    background-size: 980px 560px;
+    background-position-x: 0px;
+    background-repeat: no-repeat;
+    text-align: center;
+    width: 980px;
+    height: 560px;
+    position: absolute;
+    visibility: hidden;
+}
+
+#winScreen{
+    background:url('../images/fantasyknight.jpg');
     background-size: 980px 560px;
     background-position-x: 0px;
     background-repeat: no-repeat;

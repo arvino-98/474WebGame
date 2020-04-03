@@ -18,6 +18,8 @@ function Player() {
     this.stuck = false;
     this.powerUp2 = false;
     this.invincible = false; 
+    this.wave = 0; 
+    this.end = false; 
 
     /*
     Update player velocity based on key presses

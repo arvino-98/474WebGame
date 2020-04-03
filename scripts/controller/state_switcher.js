@@ -7,10 +7,18 @@ function gameStart(){
 }
 
 function gameEnd(){
-    $('#startScreen').css("visibility", "hidden");
-    $('#gameBoard').css("visibility", "hidden");
-    $('.toolbarButton').css("visibility", "hidden");
-    $('#deathScreen').css("visibility", "visible");
+    if(gameState.player.end == true){
+        $('#startScreen').css("visibility", "hidden");
+        $('#gameBoard').css("visibility", "hidden");
+        $('.toolbarButton').css("visibility", "hidden");
+        $('#winScreen').css("visibility", "visible");
+    }
+    else{
+        $('#startScreen').css("visibility", "hidden");
+        $('#gameBoard').css("visibility", "hidden");
+        $('.toolbarButton').css("visibility", "hidden");
+        $('#deathScreen').css("visibility", "visible");
+    }
 }
 
 function gameRestart(){

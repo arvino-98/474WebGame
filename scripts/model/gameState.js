@@ -24,35 +24,52 @@ function GameState() {
     */
     this.init = function() {
         this.clearBoard();
+        gameState.player.wave++; 
+        console.log("WAVE: " + gameState.player.wave);
 
         //setRandomBackground();
         // set current and next backgrounds
-        this.currentBackground = this.nextBackground;
-        while (true) {
-            // make sure nextBackground is different from current
-            this.nextBackground = getRandomBackground();
-            if (this.nextBackground != this.currentBackground) {
-                break;
+
+        if(gameState.player.wave < 10){
+            console.log('ENTERED IF');
+            this.currentBackground = this.nextBackground;
+            while (true) {
+                // make sure nextBackground is different from current
+                this.nextBackground = getRandomBackground();
+                if (this.nextBackground != this.currentBackground) {
+                    break;
+                }
             }
+            setBackground(this.currentBackground);
+    
+            // set door closed and positions
+            this.door.open = false;
+            this.door.xPos = getRndInteger(100, 1180);
+            this.door.yPos = getRndInteger(100, 620);
+    
+            // spawn small decorations
+            for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
+                console.log('SPAWNING DECOR')
+                this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
+            }
+    
+            // spawn pillars
+            var pillarPositions = randomPosition();
+            this.unlitPillars = pillarPositions.length;
+            this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
+    
+            this.enemySpawnLoc = ENEMY_SPAWN_LOCATIONS[getRndInteger(0, ENEMY_SPAWN_LOCATIONS.length)];
         }
-        setBackground(this.currentBackground);
-
-        // set door closed and positions
-        this.door.open = false;
-        this.door.xPos = getRndInteger(100, 1180);
-        this.door.yPos = getRndInteger(100, 620);
-
-        // spawn small decorations
-        for (var i = 0; i < NUMBER_OF_DECORATIONS; i++) {
-            this.spawnRandomDecoration(DECORATION_SMALL_NAME_LIST ,15, 15, 0, 0, 50, 360, false);
+        if(gameState.player.wave == 9){
+            gameState.player.speed_increment = 0;
+            gameState.player.dx = 0;
+            gameState.player.dy = 0;
+            gameState.clearBoard();
+            gameState.player.wave = 0;
+            gameEnd(); 
+            gameState.player.end = true; 
         }
-
-        // spawn pillars
-        var pillarPositions = randomPosition();
-        this.unlitPillars = pillarPositions.length;
-        this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
-
-        this.enemySpawnLoc = ENEMY_SPAWN_LOCATIONS[getRndInteger(0, ENEMY_SPAWN_LOCATIONS.length)];
+       
         console.log('DONE!');
     }
 
@@ -267,7 +284,10 @@ Main game loop that continuously updates entitities
 and checks/handles collisions
 */
 function gameLoop() {
-    // player lights all pillars, open door to next level
+    // console.log('LOOP RUNNING')
+if(gameState.player.end == false){ 
+    // console.log('LOOP IF!');
+       // player lights all pillars, open door to next level
     if (gameState.unlitPillars == 0 && gameState.enemyMap.size <= 0 && gameState.casterEnemyMap.size <= 0) {
         gameState.door.open = true;
     }
@@ -291,7 +311,8 @@ function gameLoop() {
         if (a <= 5) {
             gameState.spawnCasterEnemy(gameState.enemySpawnLoc[0], gameState.enemySpawnLoc[1]);
         }
-        if( gameState.powerUpMap.size <= 5 && !(gameState.player.health <= 0)){
+        console.log('PU MAP SIZE: ' + gameState.powerUpMap.size);
+        if( gameState.powerUpMap.size < 4 && !(gameState.player.health <= 0) && !(gameState.door.open)){
             gameState.spawnPowerUp(640, 50);
             console.log('NEW POWER-UP');
         }
@@ -312,6 +333,7 @@ function gameLoop() {
         gameState.player.speed_increment = 0;
         gameState.player.dx = 0;
         gameState.player.dy = 0;
+        gameState.player.wave = 0; 
         setTimeout(function() { 
             gameState.clearBoard();
             gameEnd(); 
@@ -369,6 +391,7 @@ function gameLoop() {
     checkPlayerDoorCollision(); // player and door
 
     requestAnimationFrame(gameLoop); // loop
+}
 }
 
 /*

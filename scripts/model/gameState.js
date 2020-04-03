@@ -183,6 +183,11 @@ function gameLoop() {
                 if(value.potion == "powerUp2"){
                     gameState.player.powerUp2 = true;
                 }
+                if(value.potion == "powerUp3"){
+                    console.log('INVINCIBLE')
+                    gameState.player.invincible = true;
+                    setTimeout(function(){ console.log('TIMES UP!'); gameState.player.invincible = false;}, 10000); 
+                }
                 gameState.removeByID(key);
                 
                 //console.log("value " + value)
@@ -214,7 +219,7 @@ function gameLoop() {
                 }
 
                 // if not attacking
-                else if (!gameState.player.attacking && gameState.player.health > 0){
+                else if (!gameState.player.attacking && gameState.player.health > 0 && gameState.player.invincible == false){
                     // delta magnified to simulate pushback
                     gameState.player.dx = value.dx * 20;
                     gameState.player.dy = value.dy * 20;

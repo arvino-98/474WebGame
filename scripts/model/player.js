@@ -17,7 +17,7 @@ function Player() {
     this.health = 100;
     this.stuck = false;
     this.powerUp2 = false;
-    this.powerUp3 = false;
+    this.invincible = false; 
 
     /*
     Update player velocity based on key presses

@@ -231,8 +231,6 @@
     visibility: hidden;
     filter: drop-shadow(3px 8px 5px rgba(187, 31, 31, 0.26));
 }
-<<<<<<< HEAD
-=======
 
 .magicExplosion {
     position: absolute;
@@ -291,4 +289,3 @@
         0 0 10px 6px rgba(89, 31, 197, 0.90), 
         0 0 14px 9px rgba(89, 31, 197, 0.50);
 }
->>>>>>> newEnemies

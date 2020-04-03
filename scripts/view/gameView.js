@@ -150,9 +150,11 @@ function loadDecorations(value, key, map) {
 }
 
 function loadPowerUps(value, key, map) {
-    $("#" + value.id).css("powerUp", "url('../images/potion.png)");
-    $('#' + value.id).css('left', value.xPos + 'px');
-    $('#' + value.id).css('top', value.yPos + 'px');
+   
+        $("#" + value.id).css("powerUp", "url('../images/potion.png')");
+        $('#' + value.id).css('left', value.xPos + 'px');
+        $('#' + value.id).css('top', value.yPos + 'px');
+   
     //console.log("load " + value.id);
 }
 

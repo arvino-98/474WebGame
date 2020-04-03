@@ -53,6 +53,7 @@ function GameState() {
         this.spawnDecorationShaped(DECORATION_COLLIDABLE_NAME_LIST[0], 100, 160, 40, 40, pillarPositions, 0, true);
 
         this.enemySpawnLoc = ENEMY_SPAWN_LOCATIONS[getRndInteger(0, ENEMY_SPAWN_LOCATIONS.length)];
+        console.log('DONE!');
     }
 
     this.spawnPowerUp = function() {
@@ -249,10 +250,12 @@ function GameState() {
         this.enemyMap.clear();
         this.casterEnemyMap.clear();
         this.decorationMap.clear();
+        this.powerUpMap.clear();
         $('.basicEnemy').remove();
         $('.casterEnemy').remove();
         $('.casterProjectile').remove();
         $('.decoration').remove();
+        $('.powerUp').remove();
     }
 
 }
@@ -268,6 +271,8 @@ function gameLoop() {
     if (gameState.unlitPillars == 0 && gameState.enemyMap.size <= 0 && gameState.casterEnemyMap.size <= 0) {
         gameState.door.open = true;
     }
+
+  
 
     // spawn wave of enemies if there are still unlit pillars
     /*
@@ -285,6 +290,10 @@ function gameLoop() {
 
         if (a <= 5) {
             gameState.spawnCasterEnemy(gameState.enemySpawnLoc[0], gameState.enemySpawnLoc[1]);
+        }
+        if( gameState.powerUpMap.size <= 5){
+            gameState.spawnPowerUp(640, 50);
+            console.log('NEW POWER-UP');
         }
     }
     gameState.waveStep += 1;

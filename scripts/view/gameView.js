@@ -8,9 +8,18 @@ const playerSpriteIncr = 36.8; // 37 41 36.8
 
 function updateCSSLoop() {
     updatePlayerCSS();
-    gameState.enemyMap.forEach(updateBasicEnemyCSS);
-    gameState.decorationMap.forEach(loadDecorations);
+    gameState.enemyMap.forEach(updateBasicEnemyCSS); // update basic enemy
+    gameState.decorationMap.forEach(loadDecorations); // update decorations
     gameState.powerUpMap.forEach(loadPowerUps);
+
+    // update caster enemy and projectiles
+    gameState.casterEnemyMap.forEach(function(value, key, map) {
+        updateCasterEnemyCSS(value, key, map);
+        value.projectileMap.forEach(updateCasterProjectileCSS);
+    });
+
+    updateDoorCSS();
+    updateEnemySpawnDoorCSS();
 
     requestAnimationFrame(updateCSSLoop); // loop
 }
@@ -40,7 +49,7 @@ function updatePlayerCSS(){
         // code to animate sprites upon movement
         document.getElementById("player").style.backgroundPosition = `-${playerSpritePos}px 0px`;
         if (gameState.player.moving) {
-            if (gameState.player.step % 8 == 0) {
+            if (gameState.player.step % 6 == 0) {
                 playerSpritePos += playerSpriteIncr;
             }
         }
@@ -88,14 +97,11 @@ function updateBasicEnemyCSS(value, key, map) {
         // choose image set based on direction
         if (value.dy < 0) {
             $("#" + key).css("background-image", "url('../images/spider_north.png')");
-        }
-        else if (value.dx > 0){
+        } else if (value.dx > 0){
             $("#" + key).css("background-image","url('../images/spider_east.png')");
-        }
-        else if (value.dx < 0){
+        } else if (value.dx < 0){
             $("#" + key).css("background-image","url('../images/spider_west.png')");
-        }
-        else if (value.dy >= 0){
+        } else if (value.dy >= 0){
             $("#" + key).css("background-image","url('../images/spider_south.png')");
         }
 
@@ -105,11 +111,23 @@ function updateBasicEnemyCSS(value, key, map) {
             if (value.step % 6 == 0) {
                 value.spritePos += 64;
             }
-        }
+            // dust cloud effect - suck, make game slow, no good
+            /*
+            if (value.step % 16 == 0) {
+                var randID = getRndInteger(0, 1000000);
+                $('#gameBoard').append("<div class='dustCloud' id='dustCloud" + randID + "'></div>"); // add to html
+                $('#dustCloud' + randID).css("left", (value.xPos-(value.dx*10)) + 'px');
+                $('#dustCloud' + randID).css("top", (value.yPos-(value.dy*5)) + 'px');
+                setTimeout( function() {$('#dustCloud' + randID).remove();}, 200);
+                //console.log('#dustCloud' + randID);
+            }
+            */
+        } 
         else {
             value.spritePos = 0;
         }
-    }
+    } 
+    
     else {
         $("#" + key).css("filter", "drop-shadow(5px 20px 0px rgba(34, 34, 34, 1))");
     }
@@ -128,6 +146,75 @@ function loadDecorations(value, key, map) {
     $('#' + value.id).css('top', value.yPos + 'px');
     $('#' + value.id).css('transform', "rotate(" + value.rotation + "deg)");
     //console.log("load " + value.map_id)
+}
+
+function updateCasterEnemyCSS(value, key, map) {
+    if (value.alive) {
+        // choose image set based on direction
+        if (value.dy < 0) {
+            $("#" + key).css("background-image", "url('../temp_images/mage_north.png')");
+        }
+        else if (value.dx > 0){
+            $("#" + key).css("background-image","url('../temp_images/mage_east.png')");
+        }
+        else if (value.dx < 0){
+            $("#" + key).css("background-image","url('../temp_images/mage_west.png')");
+        }
+        else if (value.dy >= 0){
+            $("#" + key).css("background-image","url('../temp_images/mage_south.png')");
+        }
+
+        // code to animate sprites upon movement
+        document.getElementById(key).style.backgroundPosition = `-${value.spritePos}px 0px`;
+        if (value.moving) {
+            if (value.step % 12 == 0) {
+                value.spritePos += 48.83; // width of caster sprite sheet / number of frames(6)
+            }
+        }
+        else {
+            value.spritePos = 0;
+        }
+    }
+    else {
+        $("#" + key).css("filter", "drop-shadow(5px 20px 0px rgba(34, 34, 34, 1))");
+    }
+
+    //console.log("update: " + value);
+    $('#' + value.id).css('left', value.xPos + 'px');
+    $('#' + value.id).css('top', value.yPos + 'px');
+}
+
+function updateCasterProjectileCSS(value, key, map) {
+    $('#' + value.id).css('transform',"rotate(90deg)")
+    $('#' + value.id).css('left', value.xPos + 'px');
+    $('#' + value.id).css('top', value.yPos + 'px');
+}
+
+function updateDoorCSS() {
+    $('#door').css('background', "url('../images/backgrounds/" + gameState.nextBackground + ".png')");
+    $('#door').css('opacity', gameState.doorOpacity);
+
+    // visible if open, else hidden
+    if (gameState.door.open) {
+        //$('#door').css('visibility', 'visible');
+        $('#door').css('box-shadow', "0 0 6px 3px #fff, 0 0 10px 6px rgba(89, 31, 197, 0.90), 0 0 14px 9px rgba(89, 31, 197, 0.50)");
+        $('#door').css("filter", "");
+    } else {
+        //$('#door').css('visibility', 'hidden');
+        $('#door').css('box-shadow', "");
+        $('#door').css('filter', "blur(1px)");
+    }
+    
+    $('#door').css('left', gameState.door.xPos + 'px');
+    $('#door').css('top', gameState.door.yPos + 'px');
+
+    $('#door').css('background-position', (-gameState.door.xPos) + 'px ' +  (-gameState.door.yPos+30) + 'px');
+}
+
+function updateEnemySpawnDoorCSS() {
+    $('#enemySpawnDoor').css('left', gameState.enemySpawnLoc[0] + 'px');
+    $('#enemySpawnDoor').css('top', gameState.enemySpawnLoc[1] + 'px');
+    $('#enemySpawnDoor').css('opacity', gameState.enemySpawnDoorOpacity);
 }
 
 function loadPowerUps(value, key, map) {

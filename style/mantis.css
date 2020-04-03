@@ -20,19 +20,15 @@
     visibility: hidden;
 }
 
-#gameToolBar {
-    visibility: hidden;
-}
-
 #gameBoard{
-    background:url('../images/dirt_tile.png');
+    background:url('../images/backgrounds/rock_back.png');
     width:1280px;
     height:720px;
     position:relative;
     visibility: hidden;
-    border: 10px solid transparent;
-    padding: 15px;
-    border-image: url('../images/lava_tile.png') 30% round;
+    zoom: 1.2;
+    border-style: solid;
+    overflow: hidden;
 }
 
 .gameInfo{
@@ -52,10 +48,9 @@
     z-index: 3;
 }
 
-.bigButton {
+#startGameButton {
     background-color: black; 
     margin-top: 20%;
-    border-radius: 50%;
     border: none;
     color: white;
     padding: 15px 32px;
@@ -81,44 +76,39 @@
         transform:rotate(10deg);
     }
 }
-
-.toolbarButton {
-    visibility: hidden;
-    z-index: 1000000;
-    width: 150px;
-    height:50px;
-    border-radius: 50%;
-    background-image: radial-gradient(blue, brown, black);
-    border: none;
-    filter: drop-shadow(0 0 0.15rem crimson);
-    color: white;
-}
-
-#spawnEnemyButton {
-    left: 7rem;
-    top: 6rem;
-}
-#killPlayerButton {
-    left: 2rem;
-    top: 9rem;
-}
-#mapSizeButton {
-    left: 12rem;
-    top: 9rem;
-}
-#spawnPowerUpButton {
-    left: 100px;
-    top: 100px;
-}
-
 .basicEnemy {
     position:absolute;
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
     height: 64px;
-    width: 64px;
+    width: 56px;
     z-index: 4;
 }
 
+.casterEnemy {
+    position:absolute;
+    filter: drop-shadow(3px 5px 2px rgba(181, 20, 187, 0.75));
+    height: 64px;
+    width: 48px;
+    z-index: 4;
+}
+
+.casterProjectile {
+    position:absolute;
+    background: url('../images/boulder.png'); 
+    filter: drop-shadow(5px 13px 2px rgba(172, 27, 141, 0.37));
+    height: 21px;
+    width: 21px;
+    z-index: 4;
+
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow:
+        0 0 6px 3px #fff,  /* inner */
+        0 0 10px 6px #f0f, /* middle */
+        0 0 14px 9px rgb(140, 0, 255); /* outer */
+}
 .powerUp{
     position: absolute;
     filter: drop-shadow(5px 13px 2px rgba(34, 34, 34, 0.80));
@@ -128,7 +118,6 @@
     z-index: 4;
 }
 
-
 .decoration {
     position:absolute;
     filter: drop-shadow(2px 3px 1px rgba(34, 34, 34, 0.45));
@@ -137,30 +126,32 @@
 
 #meter1 { 
     top: 5px;
-    height: 10px; 
+    height: 5px; 
     width: 250px;
 	position: absolute;
 	background: #555;
-	-moz-border-radius: 25px;
-	-webkit-border-radius: 25px;
-	border-radius: 25px;
-	padding: 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
     box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
     z-index: 5;
+    opacity: .9;
 }
 
 #meter2 { 
-    top: 35px;
-    height: 10px;  
+    top: 25px;
+    height: 5px;  
     width: 250px;
 	position: absolute;
 	background: #555;
-	-moz-border-radius: 25px;
-	-webkit-border-radius: 25px;
-	border-radius: 25px;
-	padding: 10px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	padding: 5px;
     box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
     z-index: 5;
+    opacity: .9;
 }
 
 #playerStamina {
@@ -202,4 +193,62 @@
     width: 50px;
     visibility: hidden;
     filter: drop-shadow(3px 8px 5px rgba(187, 31, 31, 0.26));
+}
+
+.magicExplosion {
+    position: absolute;
+    background: url("../temp_images/magic_explode_resized.gif");
+    height: 30px;
+    width: 30px;
+    z-index: 5;
+    opacity: .8;
+}
+
+.fireTrail {
+    position: absolute;
+    background: url("../images/fire.gif");
+    height: 35px;
+    width: 48px;
+    z-index: 1;
+}
+
+.dustCloud {
+    position: absolute;
+    background: url("../temp_images/dust_cloud.gif");
+    height: 85px;
+    width: 85px;
+    opacity: .45;
+    filter: drop-shadow(3px 8px 5px rgba(0, 0, 0, 0.308));
+    z-index: 5;
+}
+
+#door {
+    position:absolute;
+    height: 150px;
+    width: 150px;
+    z-index: 2;
+    border-radius: 50%;
+    /*-webkit-animation: fadeinout 4s linear infinite;*/
+    /*animation: fadeinout 4s linear infinite;*/
+}
+@-webkit-keyframes fadeinout {
+    0%,100% { opacity: 1; }
+    50% { opacity: .8; }
+  }
+@keyframes fadeinout {
+    0%,100% { opacity: 1; }
+    50% { opacity: .8; }
+}
+
+#enemySpawnDoor {
+    background: url("../temp_images/web.gif");
+    position:absolute;
+    height: 150px;
+    width: 150px;
+    z-index: 2;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 6px 3px #fff, 
+        0 0 10px 6px rgba(89, 31, 197, 0.90), 
+        0 0 14px 9px rgba(89, 31, 197, 0.50);
 }

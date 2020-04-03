@@ -16,8 +16,6 @@ function Player() {
     this.staminaRechargeRate = 1;
     this.health = 100;
     this.stuck = false;
-    this.powerUp2 = false;
-    this.powerUp3 = false;
 
     /*
     Update player velocity based on key presses

@@ -1,14 +1,13 @@
 function gameStart(){
     $('#startScreen').css("visibility", "hidden");
     $('#gameBoard').css("visibility", "visible");
-    $('.toolbarButton').css("visibility", "visible");
     gameState.init();
+    requestAnimationFrame(gameLoop); // loop
 }
 
 function gameEnd(){
     $('#startScreen').css("visibility", "hidden");
     $('#gameBoard').css("visibility", "hidden");
-    $('.toolbarButton').css("visibility", "hidden");
     $('#deathScreen').css("visibility", "visible");
 }
 

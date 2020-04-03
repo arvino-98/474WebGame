@@ -291,7 +291,7 @@ function gameLoop() {
         if (a <= 5) {
             gameState.spawnCasterEnemy(gameState.enemySpawnLoc[0], gameState.enemySpawnLoc[1]);
         }
-        if( gameState.powerUpMap.size <= 5){
+        if( gameState.powerUpMap.size <= 5 && !(gameState.player.health <= 0)){
             gameState.spawnPowerUp(640, 50);
             console.log('NEW POWER-UP');
         }
